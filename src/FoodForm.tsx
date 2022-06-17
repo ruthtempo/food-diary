@@ -4,8 +4,24 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Form, InputGroup, ListGroup, Card } from "react-bootstrap"
 
 export const FoodForm = () => {
+  //symptom categories : mood & physical symptoms 
+  const physicalSymptoms = ["satisfied", "sleepy", "fueled", "stomach cramps", "gas", "bloating", "headache", "fogginess", "acne", "itchiness", "tired"]
+  const moodSymptoms = ["happy", "feeling positive", "feeling negative", "sad", "irritability", "angry", "guilty", "ok", "anxious"]
+
   const [ingredient, setIngredient] = useState("")
   const [foodList, setFoodList] = useState<string[]>([])
+  const [myPhysicalSymptoms, setMyPhysicalSymptoms] = useState<string[]>([])
+  const [myMood, setMyMood] = useState<string[]>([])
+
+
+  const toggleSelection = (mySymptomCategory: string[], setSymptoms: React.Dispatch<React.SetStateAction<string[]>>, symptom: string) => {
+    if (!mySymptomCategory.includes(symptom)) {
+      setSymptoms(oldSymptoms => oldSymptoms.concat(symptom))
+    } else {
+      const updatedSymptomList = mySymptomCategory.filter(s => s != symptom)
+      setSymptoms(updatedSymptomList)
+    }
+  }
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setIngredient(e.target.value)
@@ -60,20 +76,14 @@ export const FoodForm = () => {
         </Card>
       </Form.Group>
 
+      {/* part 2 form */}
       <Form.Group>
         <Card style={{ width: '18rem' }}>
           <Card.Header>physical symptoms</Card.Header>
           <ListGroup>
-            <ListGroup.Item>satisfied</ListGroup.Item>
-            <ListGroup.Item>sleepy</ListGroup.Item>
-            <ListGroup.Item>fueled</ListGroup.Item>
-            <ListGroup.Item>stomach cramps</ListGroup.Item>
-            <ListGroup.Item>gas</ListGroup.Item>
-            <ListGroup.Item>bloated</ListGroup.Item>
-            <ListGroup.Item>fogginess</ListGroup.Item>
-            <ListGroup.Item>acne</ListGroup.Item>
-            <ListGroup.Item>tiredness</ListGroup.Item>
-            <ListGroup.Item>headache</ListGroup.Item>
+            {physicalSymptoms.map(symptom => (
+              <ListGroup.Item onClick={() => toggleSelection(myPhysicalSymptoms, setMyPhysicalSymptoms, symptom)} style={{ backgroundColor: myPhysicalSymptoms.includes(symptom) ? "green" : "" }}>{symptom}</ListGroup.Item>
+            ))}
           </ListGroup>
         </Card>
       </Form.Group>
@@ -82,14 +92,9 @@ export const FoodForm = () => {
         <Card style={{ width: '18rem' }}>
           <Card.Header>Mood</Card.Header>
           <ListGroup>
-            <ListGroup.Item>happy</ListGroup.Item>
-            <ListGroup.Item>feeling alright</ListGroup.Item>
-            <ListGroup.Item>depressed</ListGroup.Item>
-            <ListGroup.Item>guilt</ListGroup.Item>
-            <ListGroup.Item>feeling positive</ListGroup.Item>
-            <ListGroup.Item>feeling negative</ListGroup.Item>
-            <ListGroup.Item>anxiety</ListGroup.Item>
-            <ListGroup.Item>irritability</ListGroup.Item>
+            {moodSymptoms.map(symptom => (
+              <ListGroup.Item onClick={() => toggleSelection(myMood, setMyMood, symptom)} style={{ backgroundColor: myMood.includes(symptom) ? "green" : "" }}>{symptom}</ListGroup.Item>
+            ))}
           </ListGroup>
         </Card>
       </Form.Group>
