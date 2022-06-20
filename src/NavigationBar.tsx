@@ -14,7 +14,7 @@ export const NavigationBar = () => {
             height="30"
             className="d-inline-block align-top"
           />{' '}
-          React Bootstrap
+          Food Diary
         </Navbar.Brand>
       </Container>
     </Navbar>
