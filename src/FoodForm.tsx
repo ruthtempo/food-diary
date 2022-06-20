@@ -10,7 +10,9 @@ import { Food } from "./App"
 export const FoodForm = (p: {
   setAnswers: React.Dispatch<React.SetStateAction<Answer[]>>
 }) => {
-  const { register, control } = useForm<Food>({
+
+  const includedFoods = ["Raw food", "Fried food", "Gluten", "Dairy", "Soy Products", "Other Allergens (eggs, fish, mustard, peanuts and other nuts, celery, sesame, sulfites )", "Canned food", "Convenient or fast food", "Candy or other processed sweets"]
+  const { register, control, handleSubmit } = useForm<Food>({
     defaultValues: {
       type: "food",
       meal: "",
@@ -25,22 +27,20 @@ export const FoodForm = (p: {
 
 
 
-  const saveInput = (meal: string, list: string[], time: string) => {
+  const saveInput = (food: Food) => {
+
     p.setAnswers(oldAnswers => oldAnswers.concat({
-      type: "food",
+      ...food,
       date: new Date(),
-      meal: meal,
-      foodList: list,
-      selectedTime: time
     }))
   }
 
 
   return (
-    <Form>
+    <Form onSubmit={handleSubmit(saveInput)}>
       <Form.Group className="mb-3 mt-3">
-        <Form.Select {...register("meal")}>
-          <option >Choose Type of Meal</option>
+        <Form.Label>Type of Meal</Form.Label>
+        <Form.Select {...register("meal", { required: "select Type of Meal" })}>
           <option value="breakfast">Breakfast</option>
           <option value="lunch">Lunch</option>
           <option value="dinner">Dinner</option>
@@ -49,10 +49,18 @@ export const FoodForm = (p: {
       </Form.Group>
 
       <Form.Group className="mb-3">
-        <Form.Label>Time of Meal</Form.Label>
-        <Form.Control type="time" {...register("selectedTime")}></Form.Control>
+        <Form.Label>Time</Form.Label>
+        <Form.Control type="time" {...register("selectedTime", { required: "Please select a time." })}></Form.Control>
       </Form.Group>
+      <Form.Group>
+        <Form.Label>My Meal included: </Form.Label>
+        <>
+          {includedFoods.map(f =>
+            <Form.Check type="checkbox" label={f} key={f} />
+          )}
+        </>
 
+      </Form.Group>
       <Controller  //interface between my custom component and the react form hook state
         control={control}
         name="foodList"
@@ -60,8 +68,12 @@ export const FoodForm = (p: {
           <FoodList foodList={field.value} onChange={field.onChange} />
         }
       />
-
-      <Button className="mt-3">Save</Button>
+      <Form.Group>
+        <Form.Label>
+          How would you rate the overall experience of your meal (quality, taste...)
+        </Form.Label>
+      </Form.Group>
+      <Button className="mt-3" type="submit">Save</Button>
     </Form >
   )
 }
@@ -98,7 +110,7 @@ const FoodList = (p: {
     <>
       <InputGroup className="mb-3">
         <Form.Control
-          placeholder="Type Ingredient or Dish"
+          placeholder="Enter Ingredient or Dish"
           aria-label="Ingredient"
           aria-describedby="basic-addon2"
           onChange={handleChange}
