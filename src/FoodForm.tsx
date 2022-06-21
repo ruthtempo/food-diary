@@ -1,9 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form"
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Form, InputGroup, ListGroup, Card } from "react-bootstrap"
+import { Button, Form, InputGroup, ListGroup, Card, Ratio } from "react-bootstrap"
 import { Answer } from "./App";
 import { Food } from "./App"
+
+const includedFoods = ["Fresh Vegetables", "fresh fruit", "Raw food", "Fried food", "Meat", "Gluten", "Dairy", "Soy Products", "Organic Food", "Other Allergens (eggs, fish, mustard, peanuts and other nuts, celery, sesame, sulfites )", "Canned food", "Convenient or fast food", "Candy or other processed sweets"]
+
+const mealRating = [
+  {
+    type: "Taste",
+    field: "taste",
+    rating: [1, 2, 3, 4, 5]
+  },
+  {
+    type: "Quality",
+    field: "quality",
+    rating: [1, 2, 3, 4, 5]
+  }, {
+    type: "Quantity",
+    field: "quantity",
+    rating: [1, 2, 3, 4, 5]
+  }, {
+    type: "Overall Exp.",
+    field: "overallExp",
+    rating: [1, 2, 3, 4, 5]
+  }
+] as const;
 
 
 
@@ -11,20 +34,30 @@ export const FoodForm = (p: {
   setAnswers: React.Dispatch<React.SetStateAction<Answer[]>>
 }) => {
 
-  const includedFoods = ["Raw food", "Fried food", "Gluten", "Dairy", "Soy Products", "Other Allergens (eggs, fish, mustard, peanuts and other nuts, celery, sesame, sulfites )", "Canned food", "Convenient or fast food", "Candy or other processed sweets"]
-  const { register, control, handleSubmit } = useForm<Food>({
+
+  const { register, control, handleSubmit, formState: { isSubmitSuccessful }, reset } = useForm<Food>({
     defaultValues: {
       type: "food",
       meal: "",
+      included: [],
       date: new Date(),
       foodList: [],
-      selectedTime: ""
+      selectedTime: "",
+      overallExp: undefined,
     }
   })
 
-
-  //const [foodList, setFoodList] = useState<string[]>([])
-
+  useEffect(() => {
+    reset({
+      type: "food",
+      meal: "",
+      included: [],
+      date: new Date(),
+      foodList: [],
+      selectedTime: "",
+      overallExp: undefined,
+    })
+  }, [isSubmitSuccessful])
 
 
   const saveInput = (food: Food) => {
@@ -54,12 +87,9 @@ export const FoodForm = (p: {
       </Form.Group>
       <Form.Group>
         <Form.Label>My Meal included: </Form.Label>
-        <>
-          {includedFoods.map(f =>
-            <Form.Check type="checkbox" label={f} key={f} />
-          )}
-        </>
-
+        {includedFoods.map(f =>
+          <Form.Check type="checkbox" value={f} label={f} key={f} {...register("included")} />
+        )}
       </Form.Group>
       <Controller  //interface between my custom component and the react form hook state
         control={control}
@@ -68,10 +98,17 @@ export const FoodForm = (p: {
           <FoodList foodList={field.value} onChange={field.onChange} />
         }
       />
-      <Form.Group>
-        <Form.Label>
-          How would you rate the overall experience of your meal (quality, taste...)
-        </Form.Label>
+
+      <Form.Label>
+        How would you rate your meal (1 - Very Poor & 5 - Very Good)
+      </Form.Label>
+      <Form.Group className="d-flex flex-column">
+        {mealRating.map(r =>
+          <div key={r.type}>
+            <Form.Label className="me-3">{r.type}</Form.Label>
+            {r.rating.map(rat => <Form.Check inline type="radio" label={rat} value={rat} {...register(r.field)} key={rat} ></Form.Check>)}
+          </div>
+        )}
       </Form.Group>
       <Button className="mt-3" type="submit">Save</Button>
     </Form >
