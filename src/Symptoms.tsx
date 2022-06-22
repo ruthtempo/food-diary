@@ -7,8 +7,8 @@ import { Symptoms } from "./App"
 
 
 //symptom categories : mood & physical symptoms 
-const physicalSymptoms = ["satisfied", "sleepy", "fueled", "stomach cramps", "gas", "bloating", "headache", "fogginess", "acne", "itchiness", "tired"]
-const moodSymptoms = ["happy", "feeling positive", "feeling negative", "sad", "irritability", "angry", "guilty", "ok", "anxious"]
+const physicalSymptoms = ["satisfied", "sleepy", "fueled", "stomach cramps", "gas", "bloating", "headache", "fogginess", "acne", "itchiness", "tired", "insomnia",]
+const moodSymptoms = ["happy", "content", "feeling optimistic", "feeling pessimistic", "peaceful", "sadness", "frustrated", "irritated, "angry", "guilty", "ok", "anxiety", "racing thoughts", "grumpy"]
 
 
 

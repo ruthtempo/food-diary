@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { ErrorMessage } from '@hookform/error-message';
 
 
-const includedFoods = ["Fresh Vegetables", "fresh fruit", "Raw food", "Fried food", "Meat", "Gluten", "Dairy", "Soy Products", "Organic Food", , "Canned food", "Convenient or fast food", "Candy or other processed sweets", "Other Allergens (eggs, fish, mustard, peanuts and other nuts, celery, sesame, sulfites )"]
+const includedFoods = ["Fresh vegetables/legumes", "Fresh fruit", "Raw food", "Fried food", "Caffeine", "Alcohol", "Meat", "Gluten", "Dairy", "Soy Products", "Organic Food", "Canned food", "Convenient or fast food", "Candy or other processed sweets", "Other Allergens (eggs, fish, mustard, peanuts and other nuts, celery, sesame, sulfites )"]
 
 const mealRating = [
   {
