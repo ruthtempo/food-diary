@@ -7,7 +7,7 @@ export const NavigationBar = () => {
   return (
     <Navbar bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand href="/">
+        <Navbar.Brand as={Link} to="/">
           <img
             alt=""
             src="/logo.svg"
@@ -16,7 +16,9 @@ export const NavigationBar = () => {
             className="d-inline-block align-top"
           />{' '}
           Food Diary
+
         </Navbar.Brand>
+
         <Nav>
           <Nav.Item>
             <Nav.Link className="text-primary" to="/Calendar" as={Link} >Calendar</Nav.Link>

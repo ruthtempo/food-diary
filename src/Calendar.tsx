@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button, Table } from 'react-bootstrap'
+import { Button, Table, OverlayTrigger, Popover } from 'react-bootstrap'
 import { differenceInCalendarDays, endOfMonth, endOfWeek, getWeeksInMonth, isSameDay, isSameMonth, isToday } from "date-fns";
 import { add, startOfMonth, sub, getDate, startOfWeek } from "date-fns/esm";
 import format from "date-fns/format";
@@ -65,6 +65,16 @@ function getWeeks(days: (CalendarRecord)[], currentDate: Date): (CalendarRecord)
 }
 
 
+const popover = (
+  <Popover id="popover-basic">
+    <Popover.Header as="h3">Check with the Calendar</Popover.Header>
+    <Popover.Body>
+      By clicking on a <strong>highlighted
+        day</strong> you can check all your logs!
+    </Popover.Body>
+  </Popover>
+);
+
 
 export const Calendar = (p: {
   answers: Answer[];
@@ -89,45 +99,50 @@ export const Calendar = (p: {
   }
   return (
     <>
-      <div className="d-flex flex-column align-items-center">
-        <h3 className="fs-2 mb-3 text-center">Calendar</h3>
-        <Table style={{ backgroundColor: "white", maxWidth: 400 }} className="border rounded">
-          <thead>
-            <tr>
-              <th colSpan={7}>
-                <div className="d-flex justify-content-between align-items-center fs-4">
-                  <Button variant="primary" className="text-white" onClick={prevMonth}>prev</Button>
-                  {format(currentDate, 'MMMM yyyy')}
-                  <Button variant="primary" className="text-white" onClick={nextMonth} >next</Button>
-                </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              {weekdays.map(weekday => (
-                <td className="px-0 text-center" key={weekday}><small>{weekday}</small></td>
-              ))}
-            </tr>
-            {rows.map(row => (
-              <tr key={row[0].day.toISOString()} >
-                {row.map(day => (
-                  <td
-                    key={day.day.toISOString()}
-                    role={day.checked ? "button" : undefined}
-                    className={`px-0 text-center ${day.checked ? "bg-info text-white" : " "} ${day.isCurrentDate ? "today" : ""} ${!day.isCurrentMonth ? "notCurrent" : ""}`}
-                    onClick={() => { day.checked && setSelectedDay(day.day) }}
-                  >
-                    {getDate(day.day)}
-                  </td>
+      {selectedDay ? (<DayLogs answers={p.answers} selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
+      ) : (
+        <div className="d-flex flex-column align-items-center">
+          <OverlayTrigger trigger="click" placement="right" overlay={popover}>
+            <Button variant="success" className="mb-3 mt-3">Need a Hint? </Button>
+          </OverlayTrigger>
+          <Table style={{ backgroundColor: "white", maxWidth: 400 }} className="border rounded">
+            <thead>
+              <tr>
+                <th colSpan={7}>
+                  <div className="d-flex justify-content-between align-items-center fs-4">
+                    <Button variant="primary" className="text-white" onClick={prevMonth}>prev</Button>
+                    {format(currentDate, 'MMMM yyyy')}
+                    <Button variant="primary" className="text-white" onClick={nextMonth} >next</Button>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {weekdays.map(weekday => (
+                  <td className="px-0 text-center" key={weekday}><small>{weekday}</small></td>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </Table>
+              {rows.map(row => (
+                <tr key={row[0].day.toISOString()} >
+                  {row.map(day => (
+                    <td
+                      key={day.day.toISOString()}
+                      role={day.checked ? "button" : undefined}
+                      className={`px-0 text-center ${day.checked ? "bg-info text-white" : " "} ${day.isCurrentDate ? "today" : ""} ${!day.isCurrentMonth ? "notCurrent" : ""}`}
+                      onClick={() => { day.checked && setSelectedDay(day.day) }}
+                    >
+                      {getDate(day.day)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+      )
+      }
 
-      </div>
-      {selectedDay ? (<DayLogs answers={p.answers} selectedDay={selectedDay} setSelectedDay={setSelectedDay} />) : <h3>"Click on a day to see your food & symptoms' logs"</h3>}
     </>
   )
 }

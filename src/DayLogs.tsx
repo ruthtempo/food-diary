@@ -20,6 +20,9 @@ export const DayLogs = (p: {
 }) => {
 
   const dayLogs = seeDayLogs(p.selectedDay, p.answers);
+  function restoreSelection() {
+    p.setSelectedDay(undefined)
+  }
 
   return (
     <Container className="d-flex flex-column justify-content-center ">
@@ -57,6 +60,7 @@ export const DayLogs = (p: {
 
         ))}
       </ListGroup>
+      <Button onClick={restoreSelection} className="text-white">Back to Calendar</Button>
     </Container >
 
   )
