@@ -4,6 +4,7 @@ import { differenceInCalendarDays, endOfMonth, endOfWeek, getWeeksInMonth, isSam
 import { add, startOfMonth, sub, getDate, startOfWeek } from "date-fns/esm";
 import format from "date-fns/format";
 import { Answer } from './App'
+import { DayLogs } from "./DayLogs";
 
 
 interface CalendarRecord {
@@ -33,7 +34,6 @@ function getDaysArray(selectedMonth: Date, answerInput: Answer[]): CalendarRecor
   const daysInMonth: CalendarRecord[] = []
 
   for (let i = 0; i <= daysCount; i++) {
-    //first day in the loop = begginingOfWeek
     const currentDate = add(begginingOfWeek, { days: i })
 
     daysInMonth.push({
@@ -77,7 +77,7 @@ export const Calendar = (p: {
   const daysInMonth = getDaysArray(currentDate, p.answers)
   const rows = getWeeks(daysInMonth, currentDate)
 
-  const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined)
+  const [selectedDay, setSelectedDay] = useState<Date>()
   function nextMonth() {
     setToggleStyle(!toggleStyle)
     setCurrentDate(add(currentDate, { months: 1 }))
@@ -92,13 +92,13 @@ export const Calendar = (p: {
       <div className="d-flex flex-column align-items-center">
         <h3 className="fs-2 mb-3 text-center">Calendar</h3>
         <Table style={{ backgroundColor: "white", maxWidth: 400 }} className="border rounded">
-          <thead className={toggleStyle ? "animate1" : "animate2"}>
+          <thead>
             <tr>
               <th colSpan={7}>
                 <div className="d-flex justify-content-between align-items-center fs-4">
-                  <Button variant={toggleStyle ? "primary" : "secondary"} className="text-white" onClick={prevMonth}>prev</Button>
+                  <Button variant="primary" className="text-white" onClick={prevMonth}>prev</Button>
                   {format(currentDate, 'MMMM yyyy')}
-                  <Button variant={toggleStyle ? "primary" : "secondary"} className="text-white" onClick={nextMonth} >next</Button>
+                  <Button variant="primary" className="text-white" onClick={nextMonth} >next</Button>
                 </div>
               </th>
             </tr>
@@ -125,8 +125,9 @@ export const Calendar = (p: {
             ))}
           </tbody>
         </Table>
-      </div>
 
+      </div>
+      {selectedDay ? (<DayLogs answers={p.answers} selectedDay={selectedDay} setSelectedDay={setSelectedDay} />) : <h3>"Click on a day to see your food & symptoms' logs"</h3>}
     </>
   )
 }
