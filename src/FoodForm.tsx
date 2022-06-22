@@ -4,8 +4,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Form, InputGroup, ListGroup, Card } from "react-bootstrap"
 import { Answer } from "./App";
 import { Food } from "./App"
+import { useNavigate } from "react-router-dom";
 
-const includedFoods = ["Fresh Vegetables", "fresh fruit", "Raw food", "Fried food", "Meat", "Gluten", "Dairy", "Soy Products", "Organic Food", "Other Allergens (eggs, fish, mustard, peanuts and other nuts, celery, sesame, sulfites )", "Canned food", "Convenient or fast food", "Candy or other processed sweets"]
+const includedFoods = ["Fresh Vegetables", "fresh fruit", "Raw food", "Fried food", "Meat", "Gluten", "Dairy", "Soy Products", "Organic Food", , "Canned food", "Convenient or fast food", "Candy or other processed sweets", "Other Allergens (eggs, fish, mustard, peanuts and other nuts, celery, sesame, sulfites )"]
 
 const mealRating = [
   {
@@ -34,6 +35,7 @@ export const FoodForm = (p: {
   setAnswers: React.Dispatch<React.SetStateAction<Answer[]>>
 }) => {
 
+  let navigate = useNavigate()
 
   const { register, control, handleSubmit, formState: { isSubmitSuccessful }, reset } = useForm<Food>({
     defaultValues: {
@@ -42,7 +44,7 @@ export const FoodForm = (p: {
       included: [],
       date: new Date(),
       foodList: [],
-      selectedTime: "",
+      selectedTime: "10:00",
       overallExp: undefined,
     }
   })
@@ -54,7 +56,7 @@ export const FoodForm = (p: {
       included: [],
       date: new Date(),
       foodList: [],
-      selectedTime: "",
+      selectedTime: "10:00",
       overallExp: undefined,
     })
   }, [isSubmitSuccessful])
@@ -65,14 +67,18 @@ export const FoodForm = (p: {
     p.setAnswers(oldAnswers => oldAnswers.concat({
       ...food,
       date: new Date(),
+
+
     }))
+
+    navigate("/")
   }
 
 
   return (
     <Form onSubmit={handleSubmit(saveInput)}>
       <Form.Group className="mb-3 mt-3">
-        <Form.Label>Type of Meal</Form.Label>
+        <Form.Label>Type of meal</Form.Label>
         <Form.Select {...register("meal", { required: "select Type of Meal" })}>
           <option value="breakfast">Breakfast</option>
           <option value="lunch">Lunch</option>
@@ -82,11 +88,11 @@ export const FoodForm = (p: {
       </Form.Group>
 
       <Form.Group className="mb-3">
-        <Form.Label>Time</Form.Label>
+        <Form.Label>Time of meal</Form.Label>
         <Form.Control type="time" {...register("selectedTime", { required: "Please select a time." })}></Form.Control>
       </Form.Group>
       <Form.Group>
-        <Form.Label>My Meal included: </Form.Label>
+        <Form.Label>My meal included: </Form.Label>
         {includedFoods.map(f =>
           <Form.Check type="checkbox" value={f} label={f} key={f} {...register("included")} />
         )}

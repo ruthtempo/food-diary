@@ -1,12 +1,13 @@
 import React from "react"
-import { Container, Navbar } from "react-bootstrap"
+import { Container, Navbar, Nav } from "react-bootstrap"
+import { Link } from "react-router-dom"
 
 export const NavigationBar = () => {
 
   return (
     <Navbar bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand href="#home">
+        <Navbar.Brand href="/">
           <img
             alt=""
             src="/logo.svg"
@@ -16,6 +17,11 @@ export const NavigationBar = () => {
           />{' '}
           Food Diary
         </Navbar.Brand>
+        <Nav>
+          <Nav.Item>
+            <Nav.Link className="text-primary" to="/Calendar" as={Link} >Calendar</Nav.Link>
+          </Nav.Item>
+        </Nav>
       </Container>
     </Navbar>
 

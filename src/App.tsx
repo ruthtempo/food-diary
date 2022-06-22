@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import { FoodForm } from './FoodForm';
 import { SymptomsComp } from './Symptoms';
+import { Calendar } from './Calendar';
+import { Link, Route, Routes } from 'react-router-dom';
 
 import './App.css';
 import { NavigationBar } from './NavigationBar';
@@ -49,14 +51,16 @@ function App() {
             lg={{ span: 4, offset: 4 }}
             className="h-100">
             <div className="d-flex flex-column start">
-              <Button className='mt-3 mb-3'>Register Meal</Button>
-              <Button>Register Symptoms</Button>
+              <Link className="btn btn-primary mb-3 mt-3" to="/register-meal">Register Meal</Link>
+              <Link className="btn btn-primary" to="/register-symptoms">Register Symptoms</Link>
             </div>
           </Col>
         </Row>
-
-        <FoodForm setAnswers={setAnswers} />
-        <SymptomsComp setAnswers={setAnswers} />
+        <Routes>
+          <Route path="register-meal" element={<FoodForm setAnswers={setAnswers} />} />
+          <Route path="/register-symptoms" element={<SymptomsComp setAnswers={setAnswers} />} />
+          <Route path="/calendar" element={<Calendar answers={answers} />} />
+        </Routes>
       </Container>
     </>
   );
