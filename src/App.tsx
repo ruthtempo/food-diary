@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { FoodForm } from './FoodForm';
-import { Symptoms } from './Symptoms';
+import { SymptomsComp } from './Symptoms';
 
 import './App.css';
 import { NavigationBar } from './NavigationBar';
@@ -25,7 +25,8 @@ export interface Symptoms {
   type: "symptoms",
   date: Date,
   physical: string[],
-  mood: string[]
+  mood: string[],
+  comments: ""
 }
 
 export type Answer = Food | Symptoms
@@ -43,6 +44,7 @@ function App() {
       <Container>
         <Row>
           <Col
+            xs={12}
             md={{ span: 7, offset: 2 }}
             lg={{ span: 4, offset: 4 }}
             className="h-100">
@@ -54,7 +56,7 @@ function App() {
         </Row>
 
         <FoodForm setAnswers={setAnswers} />
-        <Symptoms />
+        <SymptomsComp setAnswers={setAnswers} />
       </Container>
     </>
   );

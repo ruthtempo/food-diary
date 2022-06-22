@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form"
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Form, InputGroup, ListGroup, Card, Ratio } from "react-bootstrap"
+import { Button, Form, InputGroup, ListGroup, Card } from "react-bootstrap"
 import { Answer } from "./App";
 import { Food } from "./App"
 
@@ -145,30 +145,32 @@ const FoodList = (p: {
 
   return (
     <>
-      <InputGroup className="mb-3">
-        <Form.Control
-          placeholder="Enter Ingredient or Dish"
-          aria-label="Ingredient"
-          aria-describedby="basic-addon2"
-          onChange={handleChange}
-          value={ingredient}
-        />
-        <Button variant="outline-secondary" id="button-addon2" onClick={addToFoodList}>
-          Add
-        </Button>
-      </InputGroup>
-      <Card style={{ width: '18rem' }}>
-        <Card.Header>Food List</Card.Header>
-        <ListGroup variant="flush">
-          {p.foodList.map(ing => (
-            <ListGroup.Item className="d-flex justify-content-between" key={ing}>
-              {ing}
-              <Button variant="danger" onClick={() => deleteIngredient(ing)}>Delete</Button>
-            </ListGroup.Item>
-          )
-          )}
-        </ListGroup>
-      </Card>
+      <Form.Group>
+        <InputGroup className="mb-3 mt-4">
+          <Form.Control
+            placeholder="Enter Ingredient or Dish"
+            aria-label="Ingredient"
+            aria-describedby="basic-addon2"
+            onChange={handleChange}
+            value={ingredient}
+          />
+          <Button variant="outline-secondary" id="button-addon2" onClick={addToFoodList}>
+            Add
+          </Button>
+        </InputGroup>
+        <Card style={{ width: '18rem' }} className="mb-4">
+          <Card.Header>Food List</Card.Header>
+          <ListGroup variant="flush">
+            {p.foodList.map(ing => (
+              <ListGroup.Item className="d-flex justify-content-between" key={ing}>
+                {ing}
+                <Button variant="danger" onClick={() => deleteIngredient(ing)}>Delete</Button>
+              </ListGroup.Item>
+            )
+            )}
+          </ListGroup>
+        </Card>
+      </Form.Group>
     </>
   )
 }
