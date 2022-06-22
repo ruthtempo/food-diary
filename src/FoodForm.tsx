@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form"
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Form, InputGroup, ListGroup, Card } from "react-bootstrap"
+import { Button, Form, InputGroup, ListGroup, Card, Nav } from "react-bootstrap"
 import { Answer } from "./App";
 import { Food } from "./App"
 import { useNavigate } from "react-router-dom";
+import { ErrorMessage } from '@hookform/error-message';
+
 
 const includedFoods = ["Fresh Vegetables", "fresh fruit", "Raw food", "Fried food", "Meat", "Gluten", "Dairy", "Soy Products", "Organic Food", , "Canned food", "Convenient or fast food", "Candy or other processed sweets", "Other Allergens (eggs, fish, mustard, peanuts and other nuts, celery, sesame, sulfites )"]
 
@@ -37,7 +39,7 @@ export const FoodForm = (p: {
 
   let navigate = useNavigate()
 
-  const { register, control, handleSubmit, formState: { isSubmitSuccessful }, reset } = useForm<Food>({
+  const { register, control, handleSubmit, formState: { isSubmitSuccessful, errors }, reset } = useForm<Food>({
     defaultValues: {
       type: "food",
       meal: "",
@@ -63,61 +65,88 @@ export const FoodForm = (p: {
 
 
   const saveInput = (food: Food) => {
-
     p.setAnswers(oldAnswers => oldAnswers.concat({
       ...food,
       date: new Date(),
-
-
     }))
-
     navigate("/")
   }
 
 
   return (
-    <Form onSubmit={handleSubmit(saveInput)}>
-      <Form.Group className="mb-3 mt-3">
-        <Form.Label>Type of meal</Form.Label>
-        <Form.Select {...register("meal", { required: "select Type of Meal" })}>
-          <option value="breakfast">Breakfast</option>
-          <option value="lunch">Lunch</option>
-          <option value="dinner">Dinner</option>
-          <option value="snack">Snack</option>
-        </Form.Select>
-      </Form.Group>
+    <>
+      <Nav role="tablist">
+        <Nav.Item>
+          <Button className="navLink">1</Button>
+        </Nav.Item>
+        <Nav.Item>
+          <Button className="navLink">2</Button>
+        </Nav.Item>
+      </Nav>
+      <Form onSubmit={handleSubmit(saveInput)}>
+        <Form.Group className="mb-3 mt-3">
+          <Form.Label>Type of meal</Form.Label>
+          <Form.Select {...register("meal", { required: "select Type of Meal" })}>
+            <option value="breakfast">Breakfast</option>
+            <option value="lunch">Lunch</option>
+            <option value="dinner">Dinner</option>
+            <option value="snack">Snack</option>
+          </Form.Select>
+          <ErrorMessage
+            errors={errors}
+            name="meal"
+            render={({ message }) => <p>{message}</p>}
+          />
+        </Form.Group>
 
-      <Form.Group className="mb-3">
-        <Form.Label>Time of meal</Form.Label>
-        <Form.Control type="time" {...register("selectedTime", { required: "Please select a time." })}></Form.Control>
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>My meal included: </Form.Label>
-        {includedFoods.map(f =>
-          <Form.Check type="checkbox" value={f} label={f} key={f} {...register("included")} />
-        )}
-      </Form.Group>
-      <Controller  //interface between my custom component and the react form hook state
-        control={control}
-        name="foodList"
-        render={({ field }) =>
-          <FoodList foodList={field.value} onChange={field.onChange} />
-        }
-      />
+        <Form.Group className="mb-3">
+          <Form.Label>Time of meal</Form.Label>
+          <Form.Control type="time" {...register("selectedTime", { required: "Please select a time." })}></Form.Control>
+          <ErrorMessage
+            errors={errors}
+            name="selectedTime"
+            render={({ message }) => <p>{message}</p>}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>My meal included: </Form.Label>
+          {includedFoods.map(f =>
+            <Form.Check type="checkbox" value={f} label={f} key={f} {...register("included")} />
+          )}
+        </Form.Group>
+        <Controller  //interface between my custom component and the react form hook state
+          control={control}
+          name="foodList"
+          render={({ field }) =>
+            <FoodList foodList={field.value} onChange={field.onChange} />
+          }
+        />
 
-      <Form.Label>
-        How would you rate your meal (1 - Very Poor & 5 - Very Good)
-      </Form.Label>
-      <Form.Group className="d-flex flex-column">
-        {mealRating.map(r =>
-          <div key={r.type}>
-            <Form.Label className="me-3">{r.type}</Form.Label>
-            {r.rating.map(rat => <Form.Check inline type="radio" label={rat} value={rat} {...register(r.field)} key={rat} ></Form.Check>)}
-          </div>
-        )}
-      </Form.Group>
-      <Button className="mt-3" type="submit">Save</Button>
-    </Form >
+        <Form.Label>
+          How would you rate your meal (1 - Very Poor & 5 - Very Good)
+        </Form.Label>
+        <Form.Group className="d-flex flex-column">
+          {mealRating.map(r =>
+            <>
+              <div key={r.type}>
+                <Form.Label className="me-3">{r.type}</Form.Label>
+                {r.rating.map(rat => <Form.Check inline type="radio" label={rat} value={rat} {...register(r.field, {
+                  required: "Please rate your meal"
+                })} key={rat} ></Form.Check>)}
+              </div>
+              <ErrorMessage
+                errors={errors}
+                name={r.field}
+                render={({ message }) => <p style={{ color: "red" }}>{message}</p>}
+              />
+            </>
+          )}
+
+        </Form.Group>
+
+        <Button className="mt-3" type="submit">Save</Button>
+      </Form >
+    </>
   )
 }
 

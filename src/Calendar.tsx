@@ -103,16 +103,16 @@ export const Calendar = (p: {
       ) : (
         <div className="d-flex flex-column align-items-center">
           <OverlayTrigger trigger="click" placement="right" overlay={popover}>
-            <Button variant="success" className="mb-3 mt-3">Need a Hint? </Button>
+            <Button variant="info" className="mb-3 mt-3">Need a Hint? </Button>
           </OverlayTrigger>
           <Table style={{ backgroundColor: "white", maxWidth: 400 }} className="border rounded">
             <thead>
               <tr>
                 <th colSpan={7}>
                   <div className="d-flex justify-content-between align-items-center fs-4">
-                    <Button variant="primary" className="text-white" onClick={prevMonth}>prev</Button>
+                    <Button variant="info" className="text-white" onClick={prevMonth}>prev</Button>
                     {format(currentDate, 'MMMM yyyy')}
-                    <Button variant="primary" className="text-white" onClick={nextMonth} >next</Button>
+                    <Button variant="info" className="text-white" onClick={nextMonth} >next</Button>
                   </div>
                 </th>
               </tr>

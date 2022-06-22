@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Form, Card, ListGroup, Button } from "react-bootstrap"
 import { Controller, useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom";
 import { Answer } from "./App";
 import { Symptoms } from "./App"
 
@@ -37,13 +38,14 @@ export const SymptomsComp = (p: {
     })
   }, [isSubmitSuccessful])
 
+  let navigate = useNavigate()
 
   const saveSymptoms = (symptoms: Symptoms) => {
     p.setAnswers(oldAnswers => oldAnswers.concat({
       ...symptoms,
       date: new Date()
     }))
-
+    navigate("/")
   }
   return (
     <Form onSubmit={handleSubmit(saveSymptoms)}>
