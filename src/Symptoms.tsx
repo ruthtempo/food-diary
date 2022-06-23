@@ -49,6 +49,7 @@ export const SymptomsComp = (p: {
   }
   return (
     <Form onSubmit={handleSubmit(saveSymptoms)}>
+
       <Controller
         name="physical"
         control={control}
@@ -64,8 +65,8 @@ export const SymptomsComp = (p: {
       <Form.Control
         className="mt-3 mb-4"
         as="textarea"
-        placeholder="Other Comments..."
-        style={{ maxHeight: '100px', width: '400px' }}
+        placeholder="Additional Comments...(i.e : I've caught a cold..."
+        style={{ maxHeight: '100px' }}
         {...register("comments")}
       />
 
@@ -96,7 +97,7 @@ const CardSelect = (p: {
 
   return (
     <Form.Group className="mt-3">
-      <Card >
+      <Card className="text-center">
         <Card.Header>{p.title}</Card.Header>
         <ListGroup>
           {p.values.map(symptom => (
@@ -105,6 +106,7 @@ const CardSelect = (p: {
               style={{ backgroundColor: p.value.includes(symptom) ? "green" : "" }} >{symptom}</ListGroup.Item>
           ))}
         </ListGroup>
+        <Form.Control className="text-center" type="text" placeholder="Other" />
       </Card>
     </Form.Group>
   )

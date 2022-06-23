@@ -5,9 +5,7 @@ import { Link } from "react-router-dom"
 export const NavigationBar = () => {
 
   return (
-    <Navbar style={{
-      backgroundColor: "#c88484"
-    }} variant="dark" >
+    <Navbar className="navbarback" variant="dark" >
       <Container>
         <Navbar.Brand as={Link} to="/">
           <img

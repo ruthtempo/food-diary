@@ -9,7 +9,29 @@ import { ErrorMessage } from '@hookform/error-message';
 import Select from 'react-select'
 
 
-const includedFoods = ["Fresh vegetables/legumes", "Fresh fruit", "Raw food", "Fried food", "Caffeine", "Alcohol", "Meat", "Gluten", "Dairy", "Soy Products", "Organic Food", "Canned food", "Convenient or fast food", "Candy or other processed sweets", "Other Allergens (eggs, fish, mustard, peanuts and other nuts, celery, sesame, sulfites )"]
+export const includedFoods = [
+  { value: "vegetables", label: "Fresh vegetables/legumes" },
+  { value: "fruit", label: "Fresh fruit" },
+  { value: "raw", label: "Raw food" },
+  { value: "fried", label: "Fried food" },
+  { value: "caffeine", label: "Caffeine" },
+  { value: "alcohol", label: "Alcohol" },
+  { value: "meat", label: "Meat" },
+  { value: "gluten", label: "Gluten" },
+  { value: "dairy", label: "Dairy" },
+  { value: "soy", label: "Soy Products" },
+  { value: "organic", label: "Organic Food" },
+  { value: "canned", label: "Canned food" },
+  { value: "fast", label: "Convenient or fast food" },
+  { value: "pastries", label: "Pastries" },
+  { value: "eggs", label: "Eggs" },
+  { value: "fish", label: "Fish" },
+  { value: "mustar", label: "Mustard" },
+  { value: "peanuts", label: "Peanuts/Nuts" },
+  { value: "celery", label: "Celery" },
+  { value: "sesame", label: "Sesame" },
+  { value: "sulfites", label: "Sulfites" },
+]
 
 const mealRating = [
   {
@@ -80,12 +102,12 @@ export const FoodForm = (p: {
       <Form onSubmit={handleSubmit(saveInput)}>
         <Tabs
           defaultActiveKey="mealtype"
-          className="mb-3"
+          className="mb-3 mt-3"
         >
           <Tab eventKey="mealtype" title="1">
-            <Form.Group className="mb-3 mt-3">
+            <Form.Group className="mb-3 mt-3 ">
               <Form.Label>Type of meal</Form.Label>
-              <Form.Select {...register("meal", { required: "select Type of Meal" })}>
+              <Form.Select {...register("meal", { required: "Select a type." })}>
                 <option value="breakfast">Breakfast</option>
                 <option value="lunch">Lunch</option>
                 <option value="dinner">Dinner</option>
@@ -94,35 +116,34 @@ export const FoodForm = (p: {
               <ErrorMessage
                 errors={errors}
                 name="meal"
-                render={({ message }) => <p>{message}</p>}
+                render={({ message }) => <p style={{ color: "red" }}>{message}</p>}
               />
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Time of meal</Form.Label>
-              <Form.Control type="time" {...register("selectedTime", { required: "Please select a time." })}></Form.Control>
+              <Form.Control type="time" {...register("selectedTime", { required: "Select a time." })}></Form.Control>
               <ErrorMessage
                 errors={errors}
                 name="selectedTime"
-                render={({ message }) => <p>{message}</p>}
+                render={({ message }) => <p style={{ color: "red" }}>{message}</p>}
               />
             </Form.Group>
             <ProgressBar now={25} />
           </Tab>
           <Tab eventKey="included foods" title="2">
-            <Form.Group>
-              <Form.Label>My meal included: </Form.Label>
-              {includedFoods.map(f =>
-                <Form.Check type="checkbox" value={f} label={f} key={f} {...register("included")} />
-              )}
-            </Form.Group>
+            <Form.Label>My meal included...</Form.Label>
             <Controller
               name="included"
               control={control}
-              render={({ field }) => <Select
-                {...field}
-                options={includedFoods}
-              />}
+              render={({ field }) =>
+                <Select
+                  {...field}
+                  isMulti
+                  value={includedFoods.filter(food => field.value.includes(food.value))}
+                  onChange={(selectedValues) => field.onChange(selectedValues.map(v => v.value))} //saving only the value of the array includedfoods to "included"- label not needed
+                  options={includedFoods}
+                />}
             />
             <Controller  //interface between my custom component and the react form hook state
               control={control}
@@ -155,14 +176,10 @@ export const FoodForm = (p: {
               )}
               <ProgressBar now={95} />
             </Form.Group>
-
             <Button className="mt-3" type="submit">Save</Button>
           </Tab>
         </Tabs>
-
-
-
-
+        <Button className="mt-4 me-2" >Prev</Button><Button className="mt-4" >Next</Button>
       </Form >
     </>
   )
@@ -199,29 +216,32 @@ const FoodList = (p: {
   return (
     <>
       <Form.Group>
-        <InputGroup className="mb-3 mt-4">
-          <Form.Control
-            placeholder="Enter Ingredient or Dish"
-            aria-label="Ingredient"
-            aria-describedby="basic-addon2"
-            onChange={handleChange}
-            value={ingredient}
-          />
-          <Button variant="outline-secondary" id="button-addon2" onClick={addToFoodList}>
-            Add
-          </Button>
-        </InputGroup>
-        <Card className="mb-4">
+
+        <Card className="mb-4 mt-4">
           <Card.Header>Food List</Card.Header>
-          <ListGroup variant="flush">
-            {p.foodList.map(ing => (
-              <ListGroup.Item className="d-flex justify-content-between" key={ing}>
-                {ing}
-                <Button variant="danger" onClick={() => deleteIngredient(ing)}>Delete</Button>
-              </ListGroup.Item>
-            )
-            )}
-          </ListGroup>
+          <Card.Body>
+            <InputGroup>
+              <Form.Control
+                placeholder="Enter Ingredient or Dish"
+                aria-label="Ingredient"
+                aria-describedby="basic-addon2"
+                onChange={handleChange}
+                value={ingredient}
+              />
+              <Button variant="outline-secondary" id="button-addon2" onClick={addToFoodList}>
+                Add
+              </Button>
+            </InputGroup>
+            <ListGroup variant="flush">
+              {p.foodList.map(ing => (
+                <ListGroup.Item key={ing} className="d-flex justify-content-between">
+                  <p>{ing}</p>
+                  <Button variant="danger" className="d-flex" onClick={() => deleteIngredient(ing)}>Delete</Button>
+                </ListGroup.Item>
+              )
+              )}
+            </ListGroup>
+          </Card.Body>
         </Card>
       </Form.Group>
     </>
