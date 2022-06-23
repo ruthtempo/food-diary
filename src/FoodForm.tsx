@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form"
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Form, InputGroup, ListGroup, Card, Nav } from "react-bootstrap"
+import { Button, Form, InputGroup, ListGroup, Card, Tabs, Tab, ProgressBar } from "react-bootstrap"
 import { Answer } from "./App";
 import { Food } from "./App"
 import { useNavigate } from "react-router-dom";
 import { ErrorMessage } from '@hookform/error-message';
+import Select from 'react-select'
 
 
 const includedFoods = ["Fresh vegetables/legumes", "Fresh fruit", "Raw food", "Fried food", "Caffeine", "Alcohol", "Meat", "Gluten", "Dairy", "Soy Products", "Organic Food", "Canned food", "Convenient or fast food", "Candy or other processed sweets", "Other Allergens (eggs, fish, mustard, peanuts and other nuts, celery, sesame, sulfites )"]
@@ -38,6 +39,7 @@ export const FoodForm = (p: {
 }) => {
 
   let navigate = useNavigate()
+
 
   const { register, control, handleSubmit, formState: { isSubmitSuccessful, errors }, reset } = useForm<Food>({
     defaultValues: {
@@ -75,76 +77,92 @@ export const FoodForm = (p: {
 
   return (
     <>
-      <Nav role="tablist">
-        <Nav.Item>
-          <Button className="navLink">1</Button>
-        </Nav.Item>
-        <Nav.Item>
-          <Button className="navLink">2</Button>
-        </Nav.Item>
-      </Nav>
       <Form onSubmit={handleSubmit(saveInput)}>
-        <Form.Group className="mb-3 mt-3">
-          <Form.Label>Type of meal</Form.Label>
-          <Form.Select {...register("meal", { required: "select Type of Meal" })}>
-            <option value="breakfast">Breakfast</option>
-            <option value="lunch">Lunch</option>
-            <option value="dinner">Dinner</option>
-            <option value="snack">Snack</option>
-          </Form.Select>
-          <ErrorMessage
-            errors={errors}
-            name="meal"
-            render={({ message }) => <p>{message}</p>}
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Time of meal</Form.Label>
-          <Form.Control type="time" {...register("selectedTime", { required: "Please select a time." })}></Form.Control>
-          <ErrorMessage
-            errors={errors}
-            name="selectedTime"
-            render={({ message }) => <p>{message}</p>}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>My meal included: </Form.Label>
-          {includedFoods.map(f =>
-            <Form.Check type="checkbox" value={f} label={f} key={f} {...register("included")} />
-          )}
-        </Form.Group>
-        <Controller  //interface between my custom component and the react form hook state
-          control={control}
-          name="foodList"
-          render={({ field }) =>
-            <FoodList foodList={field.value} onChange={field.onChange} />
-          }
-        />
-
-        <Form.Label>
-          How would you rate your meal (1 - Very Poor & 5 - Very Good)
-        </Form.Label>
-        <Form.Group className="d-flex flex-column">
-          {mealRating.map(r =>
-            <>
-              <div key={r.type}>
-                <Form.Label className="me-3">{r.type}</Form.Label>
-                {r.rating.map(rat => <Form.Check inline type="radio" label={rat} value={rat} {...register(r.field, {
-                  required: "Please rate your meal"
-                })} key={rat} ></Form.Check>)}
-              </div>
+        <Tabs
+          defaultActiveKey="mealtype"
+          className="mb-3"
+        >
+          <Tab eventKey="mealtype" title="1">
+            <Form.Group className="mb-3 mt-3">
+              <Form.Label>Type of meal</Form.Label>
+              <Form.Select {...register("meal", { required: "select Type of Meal" })}>
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="snack">Snack</option>
+              </Form.Select>
               <ErrorMessage
                 errors={errors}
-                name={r.field}
-                render={({ message }) => <p style={{ color: "red" }}>{message}</p>}
+                name="meal"
+                render={({ message }) => <p>{message}</p>}
               />
-            </>
-          )}
+            </Form.Group>
 
-        </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Time of meal</Form.Label>
+              <Form.Control type="time" {...register("selectedTime", { required: "Please select a time." })}></Form.Control>
+              <ErrorMessage
+                errors={errors}
+                name="selectedTime"
+                render={({ message }) => <p>{message}</p>}
+              />
+            </Form.Group>
+            <ProgressBar now={25} />
+          </Tab>
+          <Tab eventKey="included foods" title="2">
+            <Form.Group>
+              <Form.Label>My meal included: </Form.Label>
+              {includedFoods.map(f =>
+                <Form.Check type="checkbox" value={f} label={f} key={f} {...register("included")} />
+              )}
+            </Form.Group>
+            <Controller
+              name="included"
+              control={control}
+              render={({ field }) => <Select
+                {...field}
+                options={includedFoods}
+              />}
+            />
+            <Controller  //interface between my custom component and the react form hook state
+              control={control}
+              name="foodList"
+              render={({ field }) =>
+                <FoodList foodList={field.value} onChange={field.onChange} />
+              }
+            />
+            <ProgressBar now={55} />
+          </Tab>
+          <Tab eventKey="rating" title="3">
+            <Form.Label>
+              How would you rate your meal (1 - Very Poor & 5 - Very Good)
+            </Form.Label>
+            <Form.Group className="d-flex flex-column">
+              {mealRating.map(r =>
+                <>
+                  <div key={r.type}>
+                    <Form.Label className="me-3">{r.type}</Form.Label>
+                    {r.rating.map(rat => <Form.Check inline type="radio" label={rat} value={rat} {...register(r.field, {
+                      required: "Please rate your meal"
+                    })} key={rat} ></Form.Check>)}
+                  </div>
+                  <ErrorMessage
+                    errors={errors}
+                    name={r.field}
+                    render={({ message }) => <p style={{ color: "red" }}>{message}</p>}
+                  />
+                </>
+              )}
+              <ProgressBar now={95} />
+            </Form.Group>
 
-        <Button className="mt-3" type="submit">Save</Button>
+            <Button className="mt-3" type="submit">Save</Button>
+          </Tab>
+        </Tabs>
+
+
+
+
       </Form >
     </>
   )
@@ -193,7 +211,7 @@ const FoodList = (p: {
             Add
           </Button>
         </InputGroup>
-        <Card style={{ width: '18rem' }} className="mb-4">
+        <Card className="mb-4">
           <Card.Header>Food List</Card.Header>
           <ListGroup variant="flush">
             {p.foodList.map(ing => (

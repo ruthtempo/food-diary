@@ -7,8 +7,8 @@ import { Symptoms } from "./App"
 
 
 //symptom categories : mood & physical symptoms 
-const physicalSymptoms = ["satisfied", "sleepy", "fueled", "stomach cramps", "gas", "bloating", "headache", "fogginess", "acne", "itchiness", "tired", "insomnia",]
-const moodSymptoms = ["happy", "content", "feeling optimistic", "feeling pessimistic", "peaceful", "sadness", "frustrated", "irritated, "angry", "guilty", "ok", "anxiety", "racing thoughts", "grumpy"]
+const physicalSymptoms = ["satisfied", "sleepy", "fueled", "stomach cramps", "gas", "bloating", "headache", "fogginess", "acne", "itchiness", "tired", "insomnia"]
+const moodSymptoms = ["happy", "content", "feeling optimistic", "feeling pessimistic", "peaceful", "sadness", "frustrated", "irritated", "angry", "guilty", "ok", "anxiety", "racing thoughts", "grumpy"]
 
 
 
@@ -96,7 +96,7 @@ const CardSelect = (p: {
 
   return (
     <Form.Group className="mt-3">
-      <Card style={{ width: '18rem' }}>
+      <Card >
         <Card.Header>{p.title}</Card.Header>
         <ListGroup>
           {p.values.map(symptom => (

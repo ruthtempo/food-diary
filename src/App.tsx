@@ -51,14 +51,14 @@ function App() {
             md={{ span: 7, offset: 2 }}
             lg={{ span: 4, offset: 4 }}
             className="h-100">
+            <Routes>
+              <Route path="*" element={<Home />} />
+              <Route path="register-meal" element={<FoodForm setAnswers={setAnswers} />} />
+              <Route path="register-symptoms" element={<SymptomsComp setAnswers={setAnswers} />} />
+              <Route path="calendar" element={<Calendar answers={answers} />} />
+            </Routes>
           </Col>
         </Row>
-        <Routes>
-          <Route path="*" element={<Home />} />
-          <Route path="register-meal" element={<FoodForm setAnswers={setAnswers} />} />
-          <Route path="register-symptoms" element={<SymptomsComp setAnswers={setAnswers} />} />
-          <Route path="calendar" element={<Calendar answers={answers} />} />
-        </Routes>
       </Container>
     </>
   );
