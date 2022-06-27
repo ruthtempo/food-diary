@@ -10,3 +10,12 @@
   background-color: #D6A4A4;
   color:white
 }
+
+.error{
+  color:red
+}
+
+.form{
+  background-color: whitesmoke;
+  border-radius: 10px;
+}

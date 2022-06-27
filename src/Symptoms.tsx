@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react"
-import { Form, Card, ListGroup, Button, InputGroup, ListGroupItem } from "react-bootstrap"
+import { Form, Card, ListGroup, Button, InputGroup } from "react-bootstrap"
 import { Controller, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom";
-import { isConstructorDeclaration } from "typescript";
 import { Answer } from "./App";
 import { Symptoms } from "./App"
 
@@ -46,8 +45,8 @@ export const SymptomsComp = (p: {
     navigate("/")
   }
   return (
-    <Form onSubmit={handleSubmit(saveSymptoms)}>
-
+    <Form onSubmit={handleSubmit(saveSymptoms)} className="p-4 form mt-4">
+      <h4>Register Symptoms</h4>
       <Controller
         name="physical"
         control={control}
@@ -57,7 +56,7 @@ export const SymptomsComp = (p: {
       <Controller
         name="mood"
         control={control}
-        render={({ field }) => <CardSelect title="Mood" values={moodSymptoms} value={field.value} onChange={field.onChange} />}
+        render={({ field }) => <CardSelect title="Mood Symptoms" values={moodSymptoms} value={field.value} onChange={field.onChange} />}
       />
 
       <Form.Control
@@ -103,7 +102,7 @@ const CardSelect = (p: {
     setCustomSymptom(e.target.value)
   }
   const customAdd = () => {
-    if (!customSymptoms.includes(customSymptom) && !p.values.includes(customSymptom)) {
+    if (!customSymptoms.includes(customSymptom) && !p.values.includes(customSymptom) && customSymptom !== "") {
       const newCustomSymptomsList = customSymptoms.concat(customSymptom)
       setCustomSymptoms(newCustomSymptomsList)
     } else if (p.values.includes(customSymptom)) {
@@ -140,7 +139,7 @@ const CardSelect = (p: {
               <Button onClick={() => deleteCustom(custom)}>Delete</Button>
             </ListGroup.Item>)}
         </ListGroup>
-        <InputGroup className="mb-3">
+        <InputGroup>
           <Form.Control
             placeholder="Other"
             aria-label="other"
