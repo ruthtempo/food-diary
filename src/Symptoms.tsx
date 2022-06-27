@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react"
-import { Form, Card, ListGroup, Button } from "react-bootstrap"
+import { Form, Card, ListGroup, Button, InputGroup, ListGroupItem } from "react-bootstrap"
 import { Controller, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom";
+import { isConstructorDeclaration } from "typescript";
 import { Answer } from "./App";
 import { Symptoms } from "./App"
 
 
 //symptom categories : mood & physical symptoms 
-const physicalSymptoms = ["satisfied", "sleepy", "fueled", "stomach cramps", "gas", "bloating", "headache", "fogginess", "acne", "itchiness", "tired", "insomnia"]
+const physicalSymptoms = ["satisfied", "sleepy", "fueled", "stomach cramps", "gas", "bloating", "headache", "fogginess", "acne", "itchiness", "tiredness", "insomnia"]
 const moodSymptoms = ["happy", "content", "feeling optimistic", "feeling pessimistic", "peaceful", "sadness", "frustrated", "irritated", "angry", "guilty", "ok", "anxiety", "racing thoughts", "grumpy"]
-
-
 
 
 export const SymptomsComp = (p: {
@@ -24,7 +23,6 @@ export const SymptomsComp = (p: {
       physical: [],
       mood: [],
       comments: ""
-
     }
   })
 
@@ -95,18 +93,67 @@ const CardSelect = (p: {
     }
   }
 
+
+  //custom input
+
+  const [customSymptom, setCustomSymptom] = useState("")
+  const [customSymptoms, setCustomSymptoms] = useState<string[]>([])
+
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setCustomSymptom(e.target.value)
+  }
+  const customAdd = () => {
+    if (!customSymptoms.includes(customSymptom) && !p.values.includes(customSymptom)) {
+      const newCustomSymptomsList = customSymptoms.concat(customSymptom)
+      setCustomSymptoms(newCustomSymptomsList)
+    } else if (p.values.includes(customSymptom)) {
+      alert("select this symptom from the list")
+    }
+    setCustomSymptom("")
+  }
+
+  const handleKeyPress: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
+    if (event.code === "Enter") {
+      event.preventDefault()
+      customAdd()
+    }
+  }
+
+  const deleteCustom = (customSymp: string) => {
+    const newCustomList = customSymptoms.filter(s => s !== customSymp)
+    setCustomSymptoms(newCustomList)
+  }
   return (
     <Form.Group className="mt-3">
-      <Card className="text-center">
-        <Card.Header>{p.title}</Card.Header>
+      <Card>
+        <Card.Header className="text-center">{p.title}</Card.Header>
         <ListGroup>
           {p.values.map(symptom => (
             <ListGroup.Item
               onClick={() => toggleSelection(symptom)}
-              style={{ backgroundColor: p.value.includes(symptom) ? "green" : "" }} >{symptom}</ListGroup.Item>
+              className={p.value.includes(symptom) ? "toggled" : ""}
+            >{symptom}</ListGroup.Item>
           ))}
+          {customSymptoms.map(custom =>
+            <ListGroup.Item className="d-flex justify-content-between toggled">
+              {custom}
+              <Button onClick={() => deleteCustom(custom)}>Delete</Button>
+            </ListGroup.Item>)}
         </ListGroup>
-        <Form.Control className="text-center" type="text" placeholder="Other" />
+        <InputGroup className="mb-3">
+          <Form.Control
+            placeholder="Other"
+            aria-label="other"
+            type="text"
+            aria-describedby="basic-addon2"
+            onChange={handleChange}
+            value={customSymptom}
+            onKeyPress={handleKeyPress}
+          />
+          <Button variant="outline-secondary" id="button-addon2" onClick={() => customAdd()}>
+            Add
+          </Button>
+        </InputGroup>
       </Card>
     </Form.Group>
   )

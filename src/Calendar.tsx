@@ -103,7 +103,7 @@ export const Calendar = (p: {
       ) : (
         <div className="d-flex flex-column align-items-center">
           <OverlayTrigger trigger="click" placement="right" overlay={popover}>
-            <Button variant="info" className="mb-3 mt-3">Need a Hint? </Button>
+            <Button variant="info" className="mb-3 mt-3 text-white">Need a Hint? </Button>
           </OverlayTrigger>
           <Table style={{ backgroundColor: "white", maxWidth: 400 }} className="border rounded">
             <thead>

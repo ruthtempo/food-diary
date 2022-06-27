@@ -61,9 +61,10 @@ export const FoodForm = (p: {
 }) => {
 
   let navigate = useNavigate()
+  const [key, setKey] = useState<string | null>('mealtype');
 
 
-  const { register, control, handleSubmit, formState: { isSubmitSuccessful, errors }, reset } = useForm<Food>({
+  const { register, control, handleSubmit, formState: { isSubmitSuccessful, errors }, watch, reset } = useForm<Food>({
     defaultValues: {
       type: "food",
       meal: "",
@@ -74,6 +75,10 @@ export const FoodForm = (p: {
       overallExp: undefined,
     }
   })
+
+  const [watchMeal, watchSelectedTime] = watch(["meal", "selectedTime"]);
+  const isTab2disabled = watchMeal === "" || watchSelectedTime === "";
+  const [watchIncluded, wathFoodList] = watch(["included", "foodList"])
 
   useEffect(() => {
     reset({
@@ -96,28 +101,47 @@ export const FoodForm = (p: {
     navigate("/")
   }
 
+  function nextTab() {
+
+    if (key === "mealtype") {
+      setKey("includedfoods")
+    } else if (key === "includedfoods") {
+      setKey("rating")
+    }
+    console.log(key)
+  }
+
+  function prevTab() {
+    if (key === "rating") {
+      setKey("includedfoods")
+    } else if (key === "includedfoods") {
+      setKey("mealtype")
+    }
+  }
 
   return (
     <>
       <Form onSubmit={handleSubmit(saveInput)}>
         <Tabs
-          defaultActiveKey="mealtype"
           className="mb-3 mt-3"
+          activeKey={key ?? undefined} //by default undefined
+          onSelect={(k) => setKey(k)}
         >
           <Tab eventKey="mealtype" title="1">
             <Form.Group className="mb-3 mt-3 ">
               <Form.Label>Type of meal</Form.Label>
-              <Form.Select {...register("meal", { required: "Select a type." })}>
+              <Form.Select {...register("meal", { required: true })}>
                 <option value="breakfast">Breakfast</option>
                 <option value="lunch">Lunch</option>
                 <option value="dinner">Dinner</option>
                 <option value="snack">Snack</option>
               </Form.Select>
-              <ErrorMessage
+              {errors.meal?.type === 'required' && "Select a type"}
+              {/* <ErrorMessage
                 errors={errors}
                 name="meal"
                 render={({ message }) => <p style={{ color: "red" }}>{message}</p>}
-              />
+              /> */}
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -131,7 +155,7 @@ export const FoodForm = (p: {
             </Form.Group>
             <ProgressBar now={25} />
           </Tab>
-          <Tab eventKey="included foods" title="2">
+          <Tab eventKey="includedfoods" title="2" disabled={isTab2disabled}>
             <Form.Label>My meal included...</Form.Label>
             <Controller
               name="included"
@@ -179,7 +203,8 @@ export const FoodForm = (p: {
             <Button className="mt-3" type="submit">Save</Button>
           </Tab>
         </Tabs>
-        <Button className="mt-4 me-2" >Prev</Button><Button className="mt-4" >Next</Button>
+        <Button className="mt-4 me-2" onClick={() => prevTab()} disabled={key === "mealtype"}>Prev</Button>
+        <Button className="mt-4" onClick={() => nextTab()} disabled={key === "rating"}>Next</Button>
       </Form >
     </>
   )
@@ -212,7 +237,12 @@ const FoodList = (p: {
     setIngredient(e.target.value)
   }
 
-
+  const handleKeyPress: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
+    if (event.code === "Enter") {
+      event.preventDefault()
+      addToFoodList()
+    }
+  }
   return (
     <>
       <Form.Group>
@@ -227,14 +257,15 @@ const FoodList = (p: {
                 aria-describedby="basic-addon2"
                 onChange={handleChange}
                 value={ingredient}
+                onKeyPress={handleKeyPress}
               />
-              <Button variant="outline-secondary" id="button-addon2" onClick={addToFoodList}>
+              <Button variant="outline-secondary" id="button-addon2" onClick={addToFoodList} >
                 Add
               </Button>
             </InputGroup>
             <ListGroup variant="flush">
               {p.foodList.map(ing => (
-                <ListGroup.Item key={ing} className="d-flex justify-content-between">
+                <ListGroup.Item key={ing} className="d-flex justify-content-between mt-3 p-0">
                   <p>{ing}</p>
                   <Button variant="danger" className="d-flex" onClick={() => deleteIngredient(ing)}>Delete</Button>
                 </ListGroup.Item>
@@ -246,4 +277,8 @@ const FoodList = (p: {
       </Form.Group>
     </>
   )
+}
+
+function getFieldState(arg0: string) {
+  throw new Error("Function not implemented.");
 }

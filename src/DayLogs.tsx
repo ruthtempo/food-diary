@@ -1,6 +1,6 @@
 import React from "react"
 import { isSameDay, format } from "date-fns"
-import { Button, Container, ListGroup } from "react-bootstrap"
+import { Accordion, Button, Container, ListGroup } from "react-bootstrap"
 import { Answer, Food } from "./App"
 import { includedFoods } from "./FoodForm"
 
@@ -27,34 +27,27 @@ export const DayLogs = (p: {
   }
 
   return (
-    <Container className="d-flex flex-column justify-content-center ">
+    <Container className="d-flex flex-column justify-content-center mt-3 mb-3">
       <h4>Your Logs on {format(p.selectedDay, "ccc, MMM d, y")}</h4>
-      <ListGroup as="ol" numbered>
+      <Accordion>
         {dayLogs.map((input, index) => (
-          <ListGroup.Item
-            key={index}
-            as="li"
-            className="d-flex justify-content-between align-items-start bg-secondary text-white mb-2"
-          >
-            <div className=" ps-2 me-auto">
-              <div className="fw-bold">{format(input.date, "H:mm:ss a")}</div>
-              <p> Registered: {input.type}</p>
+          <Accordion.Item eventKey={index.toString()} key={index}>
+            <Accordion.Header> {format(input.date, "H:mm:ss a")} | Registered: {input.type}</Accordion.Header>
+            <Accordion.Body>
               {input.type === "food" ? (
                 <FoodInput answer={input} />
               ) : (
-                <div>
-                  type:{input.physical}
+                <div className="d-flex flex-column">
                   physical:{input.physical}
                   mood: {input.mood}
                   comments: {input.comments}
                 </div>
               )}
-            </div>
-          </ListGroup.Item>
-
+            </Accordion.Body>
+          </Accordion.Item>
         ))}
-      </ListGroup>
-      <Button onClick={restoreSelection} className="text-white">Back to Calendar</Button>
+      </Accordion>
+      <Button onClick={restoreSelection} className="text-white">Back to month overview</Button>
     </Container >
 
   )
@@ -65,15 +58,16 @@ const FoodInput = (p: {
 }) => {
   const selectedFoods = includedFoods.filter(food => p.answer.included.includes(food.value)).map(f => f.label)
   return (
-    <div>
-      type: {p.answer.meal}
-      foods included: {selectedFoods}
-      food list: {p.answer.foodList}
-      time:{p.answer.selectedTime}
-      taste:{p.answer.taste}
-      quality:{p.answer.quality}
-      quantity:{p.answer.quantity}
-      overall Exp: {p.answer.overallExp}
-    </div>
+
+    <ListGroup className="toggled">
+      <ListGroup.Item>type: {p.answer.meal}</ListGroup.Item>
+      <ListGroup.Item>foods included: {selectedFoods}</ListGroup.Item>
+      <ListGroup.Item> food list: {p.answer.foodList}</ListGroup.Item>
+      <ListGroup.Item>time: {p.answer.selectedTime}</ListGroup.Item>
+      <ListGroup.Item> taste: {p.answer.taste}</ListGroup.Item>
+      <ListGroup.Item>  quality: {p.answer.quality}</ListGroup.Item>
+      <ListGroup.Item>  quantity: {p.answer.quantity}</ListGroup.Item>
+      <ListGroup.Item> overall Exp: {p.answer.overallExp}</ListGroup.Item>
+    </ListGroup>
   )
 }
