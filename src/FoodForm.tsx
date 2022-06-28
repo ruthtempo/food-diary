@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form"
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Form, InputGroup, ListGroup, Card, Tabs, Tab, ProgressBar } from "react-bootstrap"
+import { Button, Form, InputGroup, ListGroup, Card } from "react-bootstrap"
 import { Answer } from "./App";
 import { Food } from "./App"
-import { useNavigate } from "react-router-dom";
 import { ErrorMessage } from '@hookform/error-message';
 import Select from 'react-select'
 import { EmojiFrown, EmojiHeartEyes } from "react-bootstrap-icons";
@@ -27,7 +26,7 @@ export const includedFoods = [
   { value: "pastries", label: "Pastries" },
   { value: "eggs", label: "Eggs" },
   { value: "fish", label: "Fish" },
-  { value: "mustar", label: "Mustard" },
+  { value: "mustard", label: "Mustard" },
   { value: "peanuts", label: "Peanuts/Nuts" },
   { value: "celery", label: "Celery" },
   { value: "sesame", label: "Sesame" },
@@ -58,10 +57,10 @@ const mealRating = [
 
 
 export const FoodForm = (p: {
-  setAnswers: React.Dispatch<React.SetStateAction<Answer[]>>
+  setAnswers: (answer: Answer) => void
+
 }) => {
 
-  let navigate = useNavigate()
 
   const { register, control, handleSubmit, formState: { isSubmitSuccessful, errors }, reset } = useForm<Food>({
     defaultValues: {
@@ -89,19 +88,12 @@ export const FoodForm = (p: {
   }, [isSubmitSuccessful])
 
 
-  const saveInput = (food: Food) => {
-    p.setAnswers(oldAnswers => oldAnswers.concat({
-      ...food,
-      date: new Date(),
-    }))
-    navigate("/")
-  }
 
 
   return (
     <>
-      <Form onSubmit={handleSubmit(saveInput)} className="p-4 mt-3 form" >
-        <h4>Register Food</h4>
+      <Form onSubmit={handleSubmit(p.setAnswers)} className="p-4 mt-3 form" >
+        <h4>Register Meal</h4>
         <Form.Group className="mb-3 mt-3 ">
           <Form.Label>Type of meal</Form.Label>
           <Form.Select {...register("meal", { required: "Select a type" })}>
@@ -130,9 +122,9 @@ export const FoodForm = (p: {
         <Controller
           name="included"
           control={control}
+          rules={{ required: "Select at least one" }}
           render={({ field }) =>
             <Select
-              {...register("included", { required: "Select at least 1 option" })}
               {...field}
               isMulti
               value={includedFoods.filter(food => field.value.includes(food.value))}
@@ -230,7 +222,7 @@ const FoodList = (p: {
                 value={ingredient}
                 onKeyPress={handleKeyPress}
               />
-              <Button variant="outline-secondary" id="button-addon2" onClick={addToFoodList} >
+              <Button variant="outline-secondary" id="button-addon2" onClick={addToFoodList} style={{ zIndex: 0 }} >
                 Add
               </Button>
             </InputGroup>
@@ -250,6 +242,4 @@ const FoodList = (p: {
   )
 }
 
-function getFieldState(arg0: string) {
-  throw new Error("Function not implemented.");
-}
+

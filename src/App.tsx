@@ -3,11 +3,12 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { FoodForm } from './FoodForm';
 import { SymptomsComp } from './Symptoms';
 import { Calendar } from './Calendar';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import './App.css';
 import { NavigationBar } from './NavigationBar';
 import { Home } from './Home';
+import { parseISO } from 'date-fns';
 
 
 export interface Food {
@@ -36,10 +37,21 @@ export type Answer = Food | Symptoms
 
 
 
-function App() {
 
-  const [answers, setAnswers] = useState<Answer[]>([])
-  console.log(answers)
+function App(p: {
+  savedAnswers: Answer[]
+}) {
+
+  let navigate = useNavigate()
+
+  const [answers, setAnswers] = useState<Answer[]>(p.savedAnswers)
+
+  const addAnswer = (answer: Answer) => {
+    const newAnswers = answers.concat(answer)
+    setAnswers(newAnswers) //update the state
+    localStorage.setItem("answers", JSON.stringify(newAnswers)) // save the whole state in localstorage (newAnswers). "answers" is stale - not yet updated state
+    navigate("/")
+  }
 
   return (
     <>
@@ -53,8 +65,8 @@ function App() {
             className="h-100">
             <Routes>
               <Route path="*" element={<Home />} />
-              <Route path="register-meal" element={<FoodForm setAnswers={setAnswers} />} />
-              <Route path="register-symptoms" element={<SymptomsComp setAnswers={setAnswers} />} />
+              <Route path="register-meal" element={<FoodForm setAnswers={addAnswer} />} />
+              <Route path="register-symptoms" element={<SymptomsComp setAnswers={addAnswer} />} />
               <Route path="calendar" element={<Calendar answers={answers} />} />
             </Routes>
           </Col>

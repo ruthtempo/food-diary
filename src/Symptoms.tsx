@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react"
 import { Form, Card, ListGroup, Button, InputGroup } from "react-bootstrap"
 import { Controller, useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom";
 import { Answer } from "./App";
 import { Symptoms } from "./App"
 
 
 //symptom categories : mood & physical symptoms 
-const physicalSymptoms = ["satisfied", "sleepy", "fueled", "stomach cramps", "gas", "bloating", "headache", "fogginess", "acne", "itchiness", "tiredness", "insomnia"]
+const physicalSymptoms = ["satisfied", "sleepy", "fueled", "stomach cramps", "constipated", "diarrhea", "gas", "bloating", "headache", "fogginess", "acne", "itchiness", "tiredness", "insomnia"]
 const moodSymptoms = ["happy", "content", "feeling optimistic", "feeling pessimistic", "peaceful", "sadness", "frustrated", "irritated", "angry", "guilty", "ok", "anxiety", "racing thoughts", "grumpy"]
 
 
 export const SymptomsComp = (p: {
-  setAnswers: React.Dispatch<React.SetStateAction<Answer[]>>
+  setAnswers: (answer: Answer) => void
 }) => {
 
   const { register, handleSubmit, control, formState: { isSubmitSuccessful }, reset } = useForm<Symptoms>({
@@ -35,17 +34,10 @@ export const SymptomsComp = (p: {
     })
   }, [isSubmitSuccessful])
 
-  let navigate = useNavigate()
 
-  const saveSymptoms = (symptoms: Symptoms) => {
-    p.setAnswers(oldAnswers => oldAnswers.concat({
-      ...symptoms,
-      date: new Date()
-    }))
-    navigate("/")
-  }
+
   return (
-    <Form onSubmit={handleSubmit(saveSymptoms)} className="p-4 form mt-4">
+    <Form onSubmit={handleSubmit(p.setAnswers)} className="p-4 form mt-4">
       <h4>Register Symptoms</h4>
       <Controller
         name="physical"
@@ -58,14 +50,16 @@ export const SymptomsComp = (p: {
         control={control}
         render={({ field }) => <CardSelect title="Mood Symptoms" values={moodSymptoms} value={field.value} onChange={field.onChange} />}
       />
-
-      <Form.Control
-        className="mt-3 mb-4"
-        as="textarea"
-        placeholder="Additional Comments...(i.e : I've caught a cold..."
-        style={{ maxHeight: '100px' }}
-        {...register("comments")}
-      />
+      <Form.Group className="mt-3">
+        <Form.Label>Additional Comments</Form.Label>
+        <Form.Control
+          className="mb-4"
+          as="textarea"
+          placeholder="i.e : I've caught a cold..."
+          style={{ maxHeight: '100px' }}
+          {...register("comments")}
+        />
+      </Form.Group>
 
       <Button type="submit">Save</Button>
     </Form>

@@ -4,16 +4,31 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Answer } from './App';
+import { parseISO } from 'date-fns/esm';
+
 
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+const getSavedAnswers = () => {
+  const text = localStorage.getItem("answers")
+  const retrievedAnswers = text !== null ? JSON.parse(text) : []
+
+  const retrievedAnswersWithDateType: Answer[] = retrievedAnswers.map((a: any) => ({
+    ...a,
+    date: parseISO(a.date)
+  }))
+
+  return retrievedAnswersWithDateType
+}
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="*" element={<App />} />
+        <Route path="*" element={<App savedAnswers={getSavedAnswers()} />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

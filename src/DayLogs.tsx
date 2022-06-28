@@ -1,8 +1,9 @@
 import React from "react"
 import { isSameDay, format } from "date-fns"
-import { Accordion, Button, Container, ListGroup } from "react-bootstrap"
+import { Accordion, Button, Container, Row, Col } from "react-bootstrap"
 import { Answer, Food } from "./App"
 import { includedFoods } from "./FoodForm"
+import { ChatRightDots, Clock, ListUl, } from "react-bootstrap-icons"
 
 
 
@@ -33,15 +34,29 @@ export const DayLogs = (p: {
         {dayLogs.map((input, index) => (
           <Accordion.Item eventKey={index.toString()} key={index}>
             <Accordion.Header> {format(input.date, "H:mm:ss a")} | Registered: {input.type}</Accordion.Header>
-            <Accordion.Body>
+            <Accordion.Body className="toggled d-flex flex-column">
               {input.type === "food" ? (
                 <FoodInput answer={input} />
               ) : (
-                <div className="d-flex flex-column">
-                  physical:{input.physical}
-                  mood: {input.mood}
-                  comments: {input.comments}
-                </div>
+                <Container>
+                  <Row>
+                    <Col>Physical:{input.physical.map(p =>
+                      <ul>
+                        <li>{p}</li>
+                      </ul>)}
+                    </Col>
+                    <Col> Mood: {input.mood.map(m =>
+                      <ul>
+                        <li>{m}</li>
+                      </ul>)}
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <ChatRightDots /> <i>"{input.comments}"</i>
+                    </Col>
+                  </Row>
+                </Container>
               )}
             </Accordion.Body>
           </Accordion.Item>
@@ -58,16 +73,14 @@ const FoodInput = (p: {
 }) => {
   const selectedFoods = includedFoods.filter(food => p.answer.included.includes(food.value)).map(f => f.label)
   return (
-
-    <ListGroup className="toggled">
-      <ListGroup.Item>type: {p.answer.meal}</ListGroup.Item>
-      <ListGroup.Item>foods included: {selectedFoods}</ListGroup.Item>
-      <ListGroup.Item> food list: {p.answer.foodList}</ListGroup.Item>
-      <ListGroup.Item>time: {p.answer.selectedTime}</ListGroup.Item>
-      <ListGroup.Item> taste: {p.answer.taste}</ListGroup.Item>
-      <ListGroup.Item>  quality: {p.answer.quality}</ListGroup.Item>
-      <ListGroup.Item>  quantity: {p.answer.quantity}</ListGroup.Item>
-      <ListGroup.Item> overall Exp: {p.answer.overallExp}</ListGroup.Item>
-    </ListGroup>
+    <Container className="toggled p-4">
+      <div><Clock /> {p.answer.selectedTime} {p.answer.meal}</div>
+      <div>foods included: {selectedFoods}</div>
+      <div> <ListUl /> {p.answer.foodList}</div>
+      <div> Taste: {p.answer.taste}</div>
+      <div> Quality: {p.answer.quality}</div>
+      <div> Quantity: {p.answer.quantity}</div>
+      <div> Overall Exp: {p.answer.overallExp}</div>
+    </Container>
   )
 }
