@@ -1,5 +1,6 @@
 import React from "react"
 import { Container, Navbar, Nav } from "react-bootstrap"
+import { CalendarCheckFill } from "react-bootstrap-icons"
 import { Link } from "react-router-dom"
 
 export const NavigationBar = () => {
@@ -21,7 +22,7 @@ export const NavigationBar = () => {
 
         <Nav>
           <Nav.Item>
-            <Nav.Link className="text-primary" to="/Calendar" as={Link} >Calendar</Nav.Link>
+            <Nav.Link className="text-dark" to="/Calendar" as={Link} ><CalendarCheckFill style={{ color: '#E684AE', fontSize: '20px' }} /></Nav.Link>
           </Nav.Item>
         </Nav>
       </Container>

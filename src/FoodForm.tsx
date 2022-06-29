@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form"
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Form, InputGroup, ListGroup, Card } from "react-bootstrap"
-import { Answer } from "./App";
-import { Food } from "./App"
 import { ErrorMessage } from '@hookform/error-message';
-import Select from 'react-select'
-import { EmojiFrown, EmojiHeartEyes } from "react-bootstrap-icons";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from "react";
+import { Button, Card, Form, InputGroup, ListGroup } from "react-bootstrap";
+import { Controller, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import Select from 'react-select';
+import { Answer, Food } from "./App";
+import { Rating } from "react-simple-star-rating"
 
 
 export const includedFoods = [
@@ -37,20 +37,16 @@ const mealRating = [
   {
     type: "Taste",
     field: "taste",
-    rating: [1, 2, 3, 4, 5]
   },
   {
     type: "Quality",
     field: "quality",
-    rating: [1, 2, 3, 4, 5]
   }, {
     type: "Quantity",
     field: "quantity",
-    rating: [1, 2, 3, 4, 5]
   }, {
     type: "Overall Exp.",
     field: "overallExp",
-    rating: [1, 2, 3, 4, 5]
   }
 ] as const;
 
@@ -62,7 +58,7 @@ export const FoodForm = (p: {
 }) => {
 
 
-  const { register, control, handleSubmit, formState: { isSubmitSuccessful, errors }, reset } = useForm<Food>({
+  const { register, control, handleSubmit, formState: { errors } } = useForm<Food>({
     defaultValues: {
       type: "food",
       meal: "",
@@ -70,29 +66,21 @@ export const FoodForm = (p: {
       date: new Date(),
       foodList: [],
       selectedTime: "10:00",
-      overallExp: undefined,
     }
   })
 
-
-  useEffect(() => {
-    reset({
-      type: "food",
-      meal: "lunch",
-      included: [],
-      date: new Date(),
-      foodList: [],
-      selectedTime: "10:00",
-      overallExp: undefined,
-    })
-  }, [isSubmitSuccessful])
+  const navigate = useNavigate()
 
 
+  const onSubmit = (data: Answer) => {
+    p.setAnswers(data)
+    navigate("/")
+  }
 
 
   return (
     <>
-      <Form onSubmit={handleSubmit(p.setAnswers)} className="p-4 mt-3 form" >
+      <Form onSubmit={handleSubmit(onSubmit)} className="p-4 mt-3 mb-3 form" >
         <h4>Register Meal</h4>
         <Form.Group className="mb-3 mt-3 ">
           <Form.Label>Type of meal</Form.Label>
@@ -152,11 +140,15 @@ export const FoodForm = (p: {
               <div key={r.type} className="d-flex justify-content-between">
                 <Form.Label className="me-3 ">{r.type}</Form.Label>
                 <div>
-                  <EmojiFrown className="me-2" />
-                  {r.rating.map(rat => <Form.Check className="me-2" inline type="radio" label={rat} value={rat} {...register(r.field, {
-                    required: "Please rate your meal"
-                  })} key={rat} ></Form.Check>)}
-                  <EmojiHeartEyes />
+                  <Controller
+                    name={r.field}
+                    control={control}
+                    rules={{ required: "Please rate your meal" }}
+                    render={({ field }) =>
+                      <Rating ratingValue={field.value} initialValue={0} onClick={field.onChange} allowHover={false} />
+                    }
+                  />
+
                 </div>
               </div>
               <ErrorMessage
@@ -211,7 +203,7 @@ const FoodList = (p: {
     <>
       <Form.Group>
         <Card className="mb-4 mt-4">
-          <Card.Header>Food List</Card.Header>
+          <Card.Header>Ingredient's List</Card.Header>
           <Card.Body>
             <InputGroup className="mb-2">
               <Form.Control

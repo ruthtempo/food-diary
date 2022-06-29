@@ -3,12 +3,12 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { FoodForm } from './FoodForm';
 import { SymptomsComp } from './Symptoms';
 import { Calendar } from './Calendar';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import './App.css';
 import { NavigationBar } from './NavigationBar';
 import { Home } from './Home';
-import { parseISO } from 'date-fns';
+
 
 
 export interface Food {
@@ -18,11 +18,10 @@ export interface Food {
   included: string[],
   foodList: string[],
   selectedTime: string,
-  taste?: number,
-  quality?: number,
-  quantity?: number,
-  overallExp?: number
-
+  taste: number,
+  quality: number,
+  quantity: number,
+  overallExp: number
 }
 
 export interface Symptoms {
@@ -42,7 +41,7 @@ function App(p: {
   savedAnswers: Answer[]
 }) {
 
-  let navigate = useNavigate()
+
 
   const [answers, setAnswers] = useState<Answer[]>(p.savedAnswers)
 
@@ -50,7 +49,6 @@ function App(p: {
     const newAnswers = answers.concat(answer)
     setAnswers(newAnswers) //update the state
     localStorage.setItem("answers", JSON.stringify(newAnswers)) // save the whole state in localstorage (newAnswers). "answers" is stale - not yet updated state
-    navigate("/")
   }
 
   return (
@@ -62,7 +60,7 @@ function App(p: {
             xs={12}
             md={{ span: 7, offset: 2 }}
             lg={{ span: 4, offset: 4 }}
-            className="h-100">
+          >
             <Routes>
               <Route path="*" element={<Home />} />
               <Route path="register-meal" element={<FoodForm setAnswers={addAnswer} />} />

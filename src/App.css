@@ -19,3 +19,7 @@
   background-color: whitesmoke;
   border-radius: 10px;
 }
+
+.list{
+  list-style: none;
+}

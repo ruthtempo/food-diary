@@ -3,6 +3,7 @@ import { Form, Card, ListGroup, Button, InputGroup } from "react-bootstrap"
 import { Controller, useForm } from "react-hook-form"
 import { Answer } from "./App";
 import { Symptoms } from "./App"
+import { useNavigate } from "react-router-dom";
 
 
 //symptom categories : mood & physical symptoms 
@@ -25,19 +26,20 @@ export const SymptomsComp = (p: {
   })
 
   useEffect(() => {
-    reset({
-      type: "symptoms",
-      date: new Date(),
-      physical: [],
-      mood: [],
-      comments: ""
-    })
+    reset()
   }, [isSubmitSuccessful])
 
 
+  const navigate = useNavigate()
+
+  const onSubmit = (data: Answer) => {
+    p.setAnswers(data)
+    navigate("/")
+  }
+
 
   return (
-    <Form onSubmit={handleSubmit(p.setAnswers)} className="p-4 form mt-4">
+    <Form onSubmit={handleSubmit(onSubmit)} className="p-4 form mt-4">
       <h4>Register Symptoms</h4>
       <Controller
         name="physical"
@@ -95,10 +97,13 @@ const CardSelect = (p: {
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setCustomSymptom(e.target.value)
   }
+
   const customAdd = () => {
     if (!customSymptoms.includes(customSymptom) && !p.values.includes(customSymptom) && customSymptom !== "") {
       const newCustomSymptomsList = customSymptoms.concat(customSymptom)
       setCustomSymptoms(newCustomSymptomsList)
+      const combinedSymptomsList = p.value.concat(customSymptom)
+      p.onChange(combinedSymptomsList)
     } else if (p.values.includes(customSymptom)) {
       alert("select this symptom from the list")
     }
@@ -142,6 +147,7 @@ const CardSelect = (p: {
             onChange={handleChange}
             value={customSymptom}
             onKeyPress={handleKeyPress}
+
           />
           <Button variant="outline-secondary" id="button-addon2" onClick={() => customAdd()}>
             Add
