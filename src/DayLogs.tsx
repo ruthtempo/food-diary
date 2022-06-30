@@ -1,9 +1,9 @@
 import React from "react"
 import { isSameDay, format } from "date-fns"
-import { Accordion, Button, Container, Row, Col } from "react-bootstrap"
+import { Accordion, Button, Container, Row, Col, Badge } from "react-bootstrap"
 import { Answer, Food } from "./App"
 import { includedFoods } from "./FoodForm"
-import { BandaidFill, ChatRightDots, CheckCircleFill, Clock, HeartFill, ListUl, ZoomIn, } from "react-bootstrap-icons"
+import { BandaidFill, ChatRightDots, CheckCircleFill, Clock, HeartFill, ZoomIn, } from "react-bootstrap-icons"
 import { Rating } from "react-simple-star-rating"
 
 
@@ -32,8 +32,8 @@ export const DayLogs = (p: {
 
   return (
     <Container className="d-flex flex-column justify-content-center mt-3 mb-3">
-      <Button onClick={restoreSelection} className="text-white mb-3">Back to month overview</Button>
-      <h4>Your Logs on {format(p.selectedDay, "ccc, MMM d, y")}</h4>
+      <Button onClick={restoreSelection} className=" mb-3" variant="light">Back to month overview</Button>
+      <h4><Badge style={{ width: "100%" }} className="pt-2 pb-2">Your Logs on {format(p.selectedDay, "ccc, MMM d, y")}</Badge></h4>
       <Accordion>
         {dayLogs.map((input, index) => (
           <Accordion.Item eventKey={index.toString()} key={index}>
@@ -44,17 +44,17 @@ export const DayLogs = (p: {
               {input.type === "food" ? (
                 <FoodInput answer={input} />
               ) : (
-                <Container>
+                <Container className="p-0">
                   <Row>
-                    {input.physical.length > 0 && <Col> <BandaidFill /> {input.physical.map((p, index) =>
+                    {input.physical.length > 0 && <Col>  {input.physical.map((p, index) =>
                       <ul key={index}>
-                        <li >{p}</li>
+                        <li className="list"><BandaidFill className="me-2 icon" /> {p}</li>
                       </ul>)}
                     </Col>
                     }
                     {input.mood.length > 0 && (<Col>{input.mood.map((m, index) =>
                       <ul key={index}>
-                        <li className="list"> <HeartFill className="me-2" />{m}</li>
+                        <li className="list"> <HeartFill className="me-2 icon" />{m}</li>
                       </ul>)}
                     </Col>
                     )}
@@ -83,9 +83,9 @@ const FoodInput = (p: {
   const selectedFoods = includedFoods.filter(food => p.answer.included.includes(food.value)).map(f => f.label)
   return (
     <Container className="p-2 d-flex flex-column justify-space-between">
-      <div><Clock className="me-3" /> {p.answer.selectedTime} {p.answer.meal}</div>
-      <div><CheckCircleFill className="me-3" /> {selectedFoods.join(", ")}</div>
-      <div> <ZoomIn className="me-3" /> <i>{p.answer.foodList.join(", ")}</i></div>
+      <div><Clock className="me-3 icon" /> {p.answer.selectedTime} {p.answer.meal}</div>
+      <div className=" mt-2"><CheckCircleFill className=" me-3 icon" /> {selectedFoods.join(", ")}</div>
+      {p.answer.foodList.length > 0 && <div className=" mt-2"> <ZoomIn className="me-3 icon" /> <i>{p.answer.foodList.join(", ")}</i></div>}
       <div className="d-flex justify-content-between mt-3"> Taste: <Rating ratingValue={p.answer.taste} readonly size={25} /></div>
       <div className="d-flex justify-content-between"> Quality: <Rating ratingValue={p.answer.quality} readonly size={25} /></div>
       <div className="d-flex justify-content-between"> Quantity: <Rating ratingValue={p.answer.quantity} readonly size={25} /></div>

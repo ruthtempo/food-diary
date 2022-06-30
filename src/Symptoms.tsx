@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 //symptom categories : mood & physical symptoms 
 const physicalSymptoms = ["satisfied", "sleepy", "fueled", "stomach cramps", "constipated", "diarrhea", "gas", "bloating", "headache", "fogginess", "acne", "itchiness", "tiredness", "insomnia"]
-const moodSymptoms = ["happy", "content", "feeling optimistic", "feeling pessimistic", "peaceful", "sadness", "frustrated", "irritated", "angry", "guilty", "ok", "anxiety", "racing thoughts", "grumpy"]
+const moodSymptoms = ["happy", "content", "optimistic", "pessimistic", "peaceful", "sad", "frustrated", "irritated", "angry", "anxiety", "racing thoughts", "grumpy"]
 
 
 export const SymptomsComp = (p: {
@@ -124,7 +124,7 @@ const CardSelect = (p: {
   return (
     <Form.Group className="mt-3">
       <Card>
-        <Card.Header className="text-center">{p.title}</Card.Header>
+        <Card.Header className="text-center unicorn">{p.title}</Card.Header>
         <ListGroup>
           {p.values.map(symptom => (
             <ListGroup.Item

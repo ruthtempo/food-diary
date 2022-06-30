@@ -2,27 +2,25 @@ import React from "react"
 import { Container, Navbar, Nav } from "react-bootstrap"
 import { CalendarCheckFill } from "react-bootstrap-icons"
 import { Link } from "react-router-dom"
+import bowl from "./bowl.png"
 
 export const NavigationBar = () => {
 
   return (
-    <Navbar className="navbarback" variant="dark" >
+    <Navbar className="navbarback" >
       <Container>
         <Navbar.Brand as={Link} to="/">
           <img
             alt=""
-            src="/logo.svg"
-            width="30"
-            height="30"
+            src={bowl}
+            width="50"
             className="d-inline-block align-top"
           />{' '}
-          Food Diary
-
         </Navbar.Brand>
 
         <Nav>
           <Nav.Item>
-            <Nav.Link className="text-dark" to="/Calendar" as={Link} ><CalendarCheckFill style={{ color: '#E684AE', fontSize: '20px' }} /></Nav.Link>
+            <Nav.Link className="text-dark" to="/Calendar" as={Link} ><CalendarCheckFill className="icon p-0" style={{ fontSize: 30 }} /></Nav.Link>
           </Nav.Item>
         </Nav>
       </Container>

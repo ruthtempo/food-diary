@@ -103,18 +103,18 @@ export const Calendar = (p: {
       ) : (
         <div className="d-flex flex-column align-items-center">
           <OverlayTrigger trigger="click" placement="right" overlay={popover}>
-            <Button variant="info" className="mb-3 mt-3 text-white">Need a Hint? </Button>
+            <Button variant="light" className="mb-3 mt-3">Need a Hint? </Button>
           </OverlayTrigger>
           <Card style={{ minWidth: '95%' }} >
-            <Card.Body className="px-2">
+            <Card.Body className="px-1">
               <Table>
                 <thead>
                   <tr>
                     <th colSpan={7}>
                       <div className="d-flex justify-content-between align-items-center fs-4">
-                        <Button variant="outline-info" onClick={prevMonth}>prev</Button>
+                        <Button variant="outline-secondary" onClick={prevMonth}>prev</Button>
                         {format(currentDate, 'MMMM yyyy')}
-                        <Button variant="outline-info" onClick={nextMonth} >next</Button>
+                        <Button variant="outline-secondary" onClick={nextMonth} >next</Button>
                       </div>
                     </th>
                   </tr>
@@ -131,7 +131,7 @@ export const Calendar = (p: {
                         <td
                           key={day.day.toISOString()}
                           role={day.checked ? "button" : undefined}
-                          className={`px-0 text-center ${day.checked ? "bg-info text-white" : " "} ${day.isCurrentDate ? "today" : ""} ${!day.isCurrentMonth ? "notCurrent" : ""}`}
+                          className={`px-0 text-center ${day.checked ? "bg-secondary text-white" : " "} ${day.isCurrentDate ? "today" : ""} ${!day.isCurrentMonth ? "notCurrent" : ""}`}
                           onClick={() => { day.checked && setSelectedDay(day.day) }}
                         >
                           {getDate(day.day)}

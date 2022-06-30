@@ -203,7 +203,7 @@ const FoodList = (p: {
     <>
       <Form.Group>
         <Card className="mb-4 mt-4">
-          <Card.Header>Ingredient's List</Card.Header>
+          <Card.Header className='unicorn'>Ingredient's List</Card.Header>
           <Card.Body>
             <InputGroup className="mb-2">
               <Form.Control
