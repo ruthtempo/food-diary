@@ -31,6 +31,7 @@ export const includedFoods = [
   { value: "celery", label: "Celery" },
   { value: "sesame", label: "Sesame" },
   { value: "sulfites", label: "Sulfites" },
+  { value: "other", label: "Other" },
 ]
 
 const mealRating = [
