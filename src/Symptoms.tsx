@@ -27,7 +27,7 @@ export const SymptomsComp = (p: {
 
   useEffect(() => {
     reset()
-  }, [isSubmitSuccessful])
+  }, [isSubmitSuccessful, reset])
 
 
   const navigate = useNavigate()
