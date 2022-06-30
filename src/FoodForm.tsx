@@ -65,7 +65,7 @@ export const FoodForm = (p: {
       included: [],
       date: new Date(),
       foodList: [],
-      selectedTime: "10:00",
+      selectedTime: "",
     }
   })
 

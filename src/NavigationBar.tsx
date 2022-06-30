@@ -20,7 +20,7 @@ export const NavigationBar = () => {
 
         <Nav>
           <Nav.Item>
-            <Nav.Link className="text-dark" to="/Calendar" as={Link} ><CalendarCheckFill className="icon p-0" style={{ fontSize: 30 }} /></Nav.Link>
+            <Nav.Link className="text-dark" to="/calendar" as={Link} ><CalendarCheckFill className="icon p-0" style={{ fontSize: 30 }} /></Nav.Link>
           </Nav.Item>
         </Nav>
       </Container>
