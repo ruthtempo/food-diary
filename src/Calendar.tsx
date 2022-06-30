@@ -102,7 +102,7 @@ export const Calendar = (p: {
       {selectedDay ? (<DayLogs answers={p.answers} selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
       ) : (
         <div className="d-flex flex-column align-items-center">
-          <OverlayTrigger trigger="click" placement="right" overlay={popover}>
+          <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
             <Button variant="light" className="mb-3 mt-3">Need a Hint? </Button>
           </OverlayTrigger>
           <Card style={{ minWidth: '95%' }} >

@@ -32,7 +32,7 @@ export const DayLogs = (p: {
 
   return (
     <Container className="d-flex flex-column justify-content-center mt-3 mb-3">
-      <Button onClick={restoreSelection} className=" mb-3" variant="light">Back to month overview</Button>
+      <Button onClick={restoreSelection} className=" mb-3" variant="light">Back to Calendar</Button>
       <h4><Badge style={{ width: "100%" }} className="py-2 " bg="secondary">Your Logs on {format(p.selectedDay, "ccc, MMM d, y")}</Badge></h4>
       <Accordion>
         {dayLogs.map((input, index) => (
@@ -45,15 +45,15 @@ export const DayLogs = (p: {
                 <FoodInput answer={input} />
               ) : (
                 <Container className="p-0">
-                  <Row>
+                  <Row className="p-0">
                     {input.physical.length > 0 && <Col>  {input.physical.map((p, index) =>
-                      <ul key={index}>
+                      <ul className="p-0" key={index}>
                         <li className="list"><BandaidFill className="me-2 icon" /> {p}</li>
                       </ul>)}
                     </Col>
                     }
-                    {input.mood.length > 0 && (<Col>{input.mood.map((m, index) =>
-                      <ul key={index}>
+                    {input.mood.length > 0 && (<Col >{input.mood.map((m, index) =>
+                      <ul className="p-0" key={index}>
                         <li className="list"> <HeartFill className="me-2 icon" />{m}</li>
                       </ul>)}
                     </Col>

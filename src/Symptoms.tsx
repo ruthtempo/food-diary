@@ -4,6 +4,7 @@ import { Controller, useForm } from "react-hook-form"
 import { Answer } from "./App";
 import { Symptoms } from "./App"
 import { useNavigate } from "react-router-dom";
+import { ErrorMessage } from "@hookform/error-message";
 
 
 //symptom categories : mood & physical symptoms 
@@ -15,7 +16,7 @@ export const SymptomsComp = (p: {
   setAnswers: (answer: Answer) => void
 }) => {
 
-  const { register, handleSubmit, control, formState: { isSubmitSuccessful }, reset } = useForm<Symptoms>({
+  const { register, handleSubmit, control, formState: { isSubmitSuccessful, errors }, reset } = useForm<Symptoms>({
     defaultValues: {
       type: "symptoms",
       date: new Date(),
@@ -43,14 +44,25 @@ export const SymptomsComp = (p: {
       <h4>Register Symptoms</h4>
       <Controller
         name="physical"
+        rules={{ required: "select at least one symptom" }}
         control={control}
         render={({ field }) => <CardSelect title="Physical Symptoms" values={physicalSymptoms} value={field.value} onChange={field.onChange} />}
       />
-
+      <ErrorMessage
+        errors={errors}
+        name="physical"
+        render={({ message }) => <p className="error">{message}</p>}
+      />
       <Controller
         name="mood"
+        rules={{ required: "select at least one symptom" }}
         control={control}
         render={({ field }) => <CardSelect title="Mood Symptoms" values={moodSymptoms} value={field.value} onChange={field.onChange} />}
+      />
+      <ErrorMessage
+        errors={errors}
+        name="mood"
+        render={({ message }) => <p className="error">{message}</p>}
       />
       <Form.Group className="mt-3">
         <Form.Label>Additional Comments</Form.Label>
