@@ -5,7 +5,7 @@
 }
 
 .toggled{
-  background-color: #97adbb;
+  background-color: #97adbb !important;
   color:white
 }
 

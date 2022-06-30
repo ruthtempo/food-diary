@@ -33,7 +33,7 @@ export const DayLogs = (p: {
   return (
     <Container className="d-flex flex-column justify-content-center mt-3 mb-3">
       <Button onClick={restoreSelection} className=" mb-3" variant="light">Back to month overview</Button>
-      <h4><Badge style={{ width: "100%" }} className="pt-2 pb-2">Your Logs on {format(p.selectedDay, "ccc, MMM d, y")}</Badge></h4>
+      <h4><Badge style={{ width: "100%" }} className="py-2 " bg="secondary">Your Logs on {format(p.selectedDay, "ccc, MMM d, y")}</Badge></h4>
       <Accordion>
         {dayLogs.map((input, index) => (
           <Accordion.Item eventKey={index.toString()} key={index}>

@@ -106,7 +106,7 @@ export const Calendar = (p: {
             <Button variant="light" className="mb-3 mt-3">Need a Hint? </Button>
           </OverlayTrigger>
           <Card style={{ minWidth: '95%' }} >
-            <Card.Body className="px-1">
+            <Card.Body className="px-1 pb-0">
               <Table>
                 <thead>
                   <tr>
@@ -131,7 +131,7 @@ export const Calendar = (p: {
                         <td
                           key={day.day.toISOString()}
                           role={day.checked ? "button" : undefined}
-                          className={`px-0 text-center ${day.checked ? "bg-secondary text-white" : " "} ${day.isCurrentDate ? "today" : ""} ${!day.isCurrentMonth ? "notCurrent" : ""}`}
+                          className={`px-0 text-center ${day.checked ? "toggled" : " "} ${day.isCurrentDate ? "today" : ""} ${!day.isCurrentMonth ? "notCurrent" : ""}`}
                           onClick={() => { day.checked && setSelectedDay(day.day) }}
                         >
                           {getDate(day.day)}
