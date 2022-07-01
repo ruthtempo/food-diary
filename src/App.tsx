@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { FoodForm } from './FoodForm';
 import { SymptomsComp } from './Symptoms';
 import { Calendar } from './Calendar';
@@ -41,7 +41,7 @@ function App(p: {
   savedAnswers: Answer[]
 }) {
 
-
+  const [alert, setAlert] = useState(false)
 
   const [answers, setAnswers] = useState<Answer[]>(p.savedAnswers)
 
@@ -61,10 +61,11 @@ function App(p: {
             md={{ span: 7, offset: 2 }}
             lg={{ span: 4, offset: 4 }}
           >
+            {alert && <Alert onClose={() => setAlert(false)} dismissible>You successfully saved your entry! </Alert>}
             <Routes>
               <Route path="*" element={<Home />} />
-              <Route path="register-meal" element={<FoodForm setAnswers={addAnswer} />} />
-              <Route path="register-symptoms" element={<SymptomsComp setAnswers={addAnswer} />} />
+              <Route path="register-meal" element={<FoodForm setAnswers={addAnswer} setAlert={setAlert} />} />
+              <Route path="register-symptoms" element={<SymptomsComp setAnswers={addAnswer} setAlert={setAlert} />} />
               <Route path="calendar" element={<Calendar answers={answers} />} />
             </Routes>
           </Col>

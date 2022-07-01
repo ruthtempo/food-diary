@@ -55,7 +55,7 @@ const mealRating = [
 
 export const FoodForm = (p: {
   setAnswers: (answer: Answer) => void
-
+  setAlert: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
 
 
@@ -75,6 +75,7 @@ export const FoodForm = (p: {
 
   const onSubmit = (data: Answer) => {
     p.setAnswers(data)
+    p.setAlert(true)
     navigate("/")
   }
 

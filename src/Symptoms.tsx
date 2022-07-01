@@ -14,6 +14,7 @@ const moodSymptoms = ["happy", "content", "optimistic", "pessimistic", "peaceful
 
 export const SymptomsComp = (p: {
   setAnswers: (answer: Answer) => void
+  setAlert: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
 
   const { register, handleSubmit, control, formState: { isSubmitSuccessful, errors }, reset } = useForm<Symptoms>({
@@ -35,6 +36,7 @@ export const SymptomsComp = (p: {
 
   const onSubmit = (data: Answer) => {
     p.setAnswers(data)
+    p.setAlert(true)
     navigate("/")
   }
 
