@@ -15,3 +15,6 @@ Future improvements:
 - prediction for food intolerances (correlation food-symptoms)
 - Registration
 - Cloud Backend
+
+
+Code Quality: [![CodeFactor](https://www.codefactor.io/repository/github/ruthtempo/food-diary/badge)](https://www.codefactor.io/repository/github/ruthtempo/food-diary)
